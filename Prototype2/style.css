@@ -2,3 +2,7 @@
     height: 1080px;
     width: 1920px;
 }
+
+circle {
+    stroke:#ccc;
+}
