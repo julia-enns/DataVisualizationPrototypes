@@ -10,7 +10,7 @@ const MARGIN = {
 };
 
 //dimension of our workspace
-const   width  = 1000,
+const   width  = 1500,
     height = 1000;
 
 /**
@@ -42,11 +42,14 @@ scatterPlot = function(data, svg)
     //** SETUP *****************************************
     let startYear = 1970;
     let endYear = 2020;
-    // let years = d3.group(data, d => d.year);
-    // let uniqueYears = Array.from(years);
+    let years = d3.group(data, d => d.year);
+    let uniqueYears = Array.from(years);
 
     //create series for each attribute
     let attributeGroupNames = data.columns.slice(8, 11);    //["energy", "instrumentalness", "valence"]
+    let attributeSeries = d3.stack().keys(attributeGroupNames)(data);
+
+    console.log(attributeSeries);
 
     //** SCALES *****************************************
     xScale = d3.scaleLinear()
@@ -68,13 +71,11 @@ scatterPlot = function(data, svg)
 
     //** CREATE AXIS *****************************************
     //Create and draw x axis
-    let yearCounter = startYear;
     let xAxis = d3.axisBottom()
-        .tickFormat((d, i) =>
-        {
-            return yearCounter + (i*5);
-        })
-        .scale(xScale);
+        .scale(xScale)
+        .ticks(uniqueYears.length/5)
+        .tickFormat(d3.format("d"));
+
     chart.append("g")
         .attr("transform", "translate("+ 0 + ","+ (height-MARGIN.BOTTOM) +")")
         .call(xAxis);
@@ -85,21 +86,34 @@ scatterPlot = function(data, svg)
         .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
         .call(yAxis);
 
+    //Create labels
+    let xLabel = "Year";
+    let yLabel = "Percent"
+
     //** DATA POINTS *****************************************
-    chart.append("g")
-        .selectAll("energyPoints")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("cx", (d) =>
-        {
-            return xScale(d.year);
-        })
-        .attr("cy", (d) =>
-        {
-            return yScale(d.energy);
-        })
-        .attr("r", 10)
-        .style("fill", colour(attributeGroupNames[0]))
-        .style("opacity", "20%")
+    //Create point for each attribute
+    for(let i = 0; i < attributeGroupNames.length; i++)
+    {
+        let y = attributeGroupNames[i];
+        let yValue = function(d) {return d[y]};        //get attribute value for row
+
+        data.forEach(function (d) {
+            d[y] = +d[y];
+        });
+
+        chart.append("g")
+            .selectAll("points" + i)
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("class", "dot-" + attributeGroupNames[i])
+            .attr("cx", (d) => {
+                return xScale(d.year);
+            })
+            .attr("cy", (d) => yScale(yValue(d)))
+            .attr("r", 4)
+            .style("fill", colour(attributeGroupNames[i]))
+            .style("opacity", "50%")
+    }
+
 };
