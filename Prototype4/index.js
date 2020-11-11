@@ -188,7 +188,7 @@ scatterPlot = function(data, svg)
             .attr("r", 6)
             //.attr("r", d=> (d.score/1.5))        //score represented by size
             .style("fill", d => colourScale(d.songyear_pos))      //popularity represented by heatmap colours
-            .style("opacity", "90%");
+            .style("opacity", "80%");
     }
 
 };

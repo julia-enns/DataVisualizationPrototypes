@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8775bb1e-bc47-451b-a916-57c2ec1d2e6e" name="Default Changelist" comment="Added heatmap legend and fixed heatmap scale">
+    <list default="true" id="8775bb1e-bc47-451b-a916-57c2ec1d2e6e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../Prototype2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Prototype2/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
@@ -53,7 +53,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1605069504634</updated>
-      <workItem from="1605069505743" duration="7318000" />
+      <workItem from="1605069505743" duration="9596000" />
     </task>
     <task id="LOCAL-00001" summary="Prototype 4 intial commit: Divided attributes into separate charts">
       <created>1605072674912</created>
@@ -76,7 +76,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605077776615</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added data sorting so lower ranks appear behind higher ranked data points">
+      <created>1605078316859</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1605078316860</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -86,13 +93,14 @@
     <MESSAGE value="Prototype 4 intial commit: Divided attributes into separate charts" />
     <MESSAGE value="Changed rank encoding to size" />
     <MESSAGE value="Added heatmap legend and fixed heatmap scale" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added heatmap legend and fixed heatmap scale" />
+    <MESSAGE value="Added data sorting so lower ranks appear behind higher ranked data points" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added data sorting so lower ranks appear behind higher ranked data points" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="464" y="0" key="CommitChangelistDialog2" timestamp="1605078149632">
+    <state x="464" y="0" key="CommitChangelistDialog2" timestamp="1605078316108">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="464" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1605078149632" />
+    <state x="464" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1605078316108" />
     <state width="1279" height="208" key="GridCell.Tab.0.bottom" timestamp="1605072649018">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -109,10 +117,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1279" height="208" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1605072649018" />
-    <state x="480" y="151" key="Vcs.Push.Dialog.v2" timestamp="1605077778377">
+    <state x="480" y="151" key="Vcs.Push.Dialog.v2" timestamp="1605078324367">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="480" y="151" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1605077778377" />
+    <state x="480" y="151" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1605078324367" />
     <state x="545" y="192" key="run.anything.popup" timestamp="1605071060424">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
