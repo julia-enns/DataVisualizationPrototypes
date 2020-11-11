@@ -62,6 +62,12 @@ scatterPlot = function(data, svg)
     let padding = 20;
     let chartDistance = padding + height-MARGIN.BOTTOM-MARGIN.TOP;
 
+    //Sort data by lowest rank to highest rank (songyear_pos)
+    //so that higher ranked data points show up in front of lower ranked
+    data.sort(function(x, y){
+        return d3.descending(x.songyear_pos, y.songyear_pos);
+    })
+
     //** SCALES *****************************************
     xScale = d3.scaleLinear()
         .domain([startYear, endYear])
@@ -121,7 +127,8 @@ scatterPlot = function(data, svg)
         .attr("y", (height-MARGIN.BOTTOM ) * 3 - MARGIN.TOP)
         .text(xLabel);
 
-    //Draw legend
+    //** CREATE LEGEND *****************************************
+    //Define linear gradient of legend
     var linearGradient = svg.append("defs")
         .append("linearGradient")
         .attr("id", "linear-gradient")
@@ -135,6 +142,7 @@ scatterPlot = function(data, svg)
         .attr("offset", function(d,i) { return i/(colourScale.range().length-1); })
         .attr("stop-color", function(d) { return d; });
 
+    //Rectangle legend
     let xPosLegend = width;
     let yPosLegend = MARGIN.BOTTOM;
     let legendWidth = 50;
@@ -154,23 +162,6 @@ scatterPlot = function(data, svg)
     svg.append("g")
     .attr("transform", "translate("+ xPosLegend + ","+ yPosLegend +")")
     .call(heatMapAxis);
-
-    // for(let i = 0; i < attributeGroupNames.length; i++)
-    // {
-    //     svg.append("circle")
-    //         .attr("cx", xLegend)
-    //         .attr("cy", yLegend)
-    //         .attr("r", 6)
-    //         .style("fill", colourScale(attributeGroupNames[i]));
-    //     svg.append("text")
-    //         .attr("x", xLegend + 20)
-    //         .attr("y", yLegend)
-    //         .attr("r", 6)
-    //         .style("font-size", "15px")
-    //         .text(attributeGroupNames[i]);
-    //
-    //     yLegend += 30;
-    // }
 
     //** DATA POINTS *****************************************
     //Create point for each attribute
