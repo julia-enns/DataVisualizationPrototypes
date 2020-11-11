@@ -1,0 +1,8 @@
+#SVG_CONTAINER{
+    height: 3000px;
+    width: 1920px;
+}
+
+circle {
+    stroke:#ccc;
+}
