@@ -47,9 +47,10 @@ scatterPlot = function(data, svg)
 
     //create series for each attribute
     let attributeGroupNames = data.columns.slice(8, 11);    //["energy", "instrumentalness", "valence"]
-    let attributeSeries = d3.stack().keys(attributeGroupNames)(data);
 
-    console.log(attributeSeries);
+    //Creates group for scatter plot
+    chart = svg.append('g')
+        .attr("class", "scatterPlot")
 
     //** SCALES *****************************************
     xScale = d3.scaleLinear()
@@ -61,13 +62,9 @@ scatterPlot = function(data, svg)
         .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
     //Colour Scale for each attribute
-    let colour = d3.scaleOrdinal()
+    let colourScale = d3.scaleOrdinal()
         .domain(attributeGroupNames)
         .range(["green", "blue", "red"]);
-
-    //Creates group for scatter plot
-    chart = svg.append('g')
-        .attr("class", "scatterPlot")
 
     //** CREATE AXIS *****************************************
     //Create and draw x axis
@@ -86,9 +83,44 @@ scatterPlot = function(data, svg)
         .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
         .call(yAxis);
 
-    //Create labels
+    //Create x and y axis labels
     let xLabel = "Year";
     let yLabel = "Percent"
+
+    chart.append("text")
+        .attr("class", "x_label")
+        .attr("text-anchor", "end")
+        .attr("x", width/2 + 50)
+        .attr("y", height-MARGIN.BOTTOM + 50)
+        .text(xLabel);
+
+    chart.append("text")
+        .attr("class", "y_label")
+        .attr("text-anchor", "end")
+        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2 - 50)+")")
+        .attr("x", MARGIN.LEFT - 40)
+        .attr("y", height/2 - 50)
+        .text(yLabel);
+
+    //Draw legend
+    xLegend = width;
+    yLegend = MARGIN.BOTTOM;
+    for(let i = 0; i < attributeGroupNames.length; i++)
+    {
+        chart.append("circle")
+            .attr("cx", xLegend)
+            .attr("cy", yLegend)
+            .attr("r", 6)
+            .style("fill", colourScale(attributeGroupNames[i]));
+        chart.append("text")
+            .attr("x", xLegend + 20)
+            .attr("y", yLegend)
+            .attr("r", 6)
+            .style("font-size", "15px")
+            .text(attributeGroupNames[i]);
+
+        yLegend += 30;
+    }
 
     //** DATA POINTS *****************************************
     //Create point for each attribute
@@ -111,9 +143,11 @@ scatterPlot = function(data, svg)
                 return xScale(d.year);
             })
             .attr("cy", (d) => yScale(yValue(d)))
-            .attr("r", 4)
-            .style("fill", colour(attributeGroupNames[i]))
-            .style("opacity", "50%")
+            .attr("r", d=> (6))
+            //.attr("r", d=> (20 - (d.songyear_pos*2)))           //popularity represented by size
+            .style("fill", colourScale(attributeGroupNames[i]))
+            //.style("opacity", "40%")
+            .style("opacity", (d => (100 - (d.songyear_pos * 9))/100));     //popularity represented by opacity
     }
 
 };
