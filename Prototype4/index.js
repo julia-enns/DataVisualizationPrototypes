@@ -161,11 +161,9 @@ scatterPlot = function(data, svg)
                 return xScale(d.year);
             })
             .attr("cy", (d) => yScale(yValue(d)) + + (chartDistance*i))
-            .attr("r", 6)
-            //.attr("r", d=> (20 - (d.songyear_pos*2)))           //popularity represented by size
+            .attr("r", d=> (20 - (d.songyear_pos*2)))           //popularity represented by size
             .style("fill", colourScale(attributeGroupNames[i]))
-            //.style("opacity", "40%")
-            .style("opacity", (d => (100 - (d.songyear_pos * 9))/100));     //popularity represented by opacity
+            .style("opacity", "35%")
     }
 
 };

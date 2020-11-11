@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8775bb1e-bc47-451b-a916-57c2ec1d2e6e" name="Default Changelist" comment="Prototype 4 intial commit: Divided attributes into separate charts">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/TopYearlySongsAndAttributes.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/style.css" afterDir="false" />
+    <list default="true" id="8775bb1e-bc47-451b-a916-57c2ec1d2e6e" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../Prototype2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Prototype2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,8 +53,16 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1605069504634</updated>
-      <workItem from="1605069505743" duration="2755000" />
+      <workItem from="1605069505743" duration="3244000" />
     </task>
+    <task id="LOCAL-00001" summary="Prototype 4 intial commit: Divided attributes into separate charts">
+      <created>1605072674912</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1605072674912</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -71,10 +73,10 @@
     <option name="LAST_COMMIT_MESSAGE" value="Prototype 4 intial commit: Divided attributes into separate charts" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="464" y="0" key="CommitChangelistDialog2" timestamp="1605072648889">
+    <state x="464" y="0" key="CommitChangelistDialog2" timestamp="1605072674129">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="464" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1605072648889" />
+    <state x="464" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1605072674129" />
     <state width="1279" height="208" key="GridCell.Tab.0.bottom" timestamp="1605072649018">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -91,6 +93,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1279" height="208" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1605072649018" />
+    <state x="480" y="151" key="Vcs.Push.Dialog.v2" timestamp="1605072678091">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="480" y="151" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1605072678091" />
     <state x="545" y="192" key="run.anything.popup" timestamp="1605071060424">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
