@@ -71,10 +71,12 @@ scatterPlot = function(data, svg)
         .domain([0, 1])
         .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
-    //Colour Scale for each attribute
-    let colourScale = d3.scaleOrdinal()
-        .domain(attributeGroupNames)
-        .range(["green", "blue", "red"]);
+
+    //Colour Scale for rank (heatmap)
+    let heatMapColours = ["#1F2D86", "#3E9583", "#FFFFDD"]
+    let colourScale = d3.scaleLinear()
+        .domain([0, 5, 10])
+        .range(heatMapColours);
 
     //** CREATE AXIS *****************************************
     //Create and draw x axis
@@ -120,24 +122,55 @@ scatterPlot = function(data, svg)
         .text(xLabel);
 
     //Draw legend
-    let xLegend = width;
-    let yLegend = MARGIN.BOTTOM;
-    for(let i = 0; i < attributeGroupNames.length; i++)
-    {
-        svg.append("circle")
-            .attr("cx", xLegend)
-            .attr("cy", yLegend)
-            .attr("r", 6)
-            .style("fill", colourScale(attributeGroupNames[i]));
-        svg.append("text")
-            .attr("x", xLegend + 20)
-            .attr("y", yLegend)
-            .attr("r", 6)
-            .style("font-size", "15px")
-            .text(attributeGroupNames[i]);
+    var linearGradient = svg.append("defs")
+        .append("linearGradient")
+        .attr("id", "linear-gradient")
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "0%")
+        .attr("y2", "100%");
+    linearGradient.selectAll("stop")
+        .data( colourScale.range() )
+        .enter().append("stop")
+        .attr("offset", function(d,i) { return i/(colourScale.range().length-1); })
+        .attr("stop-color", function(d) { return d; });
 
-        yLegend += 30;
-    }
+    let xPosLegend = width;
+    let yPosLegend = MARGIN.BOTTOM;
+    let legendWidth = 50;
+    let legendHeight = 300;
+    svg.append("rect")
+        .attr("x", xPosLegend)
+        .attr("y", yPosLegend)
+        .attr("width", legendWidth)
+        .attr("height", legendHeight)
+        .style("fill", "url(#linear-gradient)");
+
+    //Define legend axis scale
+    let heatMapAxisScale = d3.scaleLinear()
+        .range([0, legendHeight])
+        .domain([1, 10]);
+    let heatMapAxis = d3.axisLeft().ticks(10).scale(heatMapAxisScale);
+    svg.append("g")
+    .attr("transform", "translate("+ xPosLegend + ","+ yPosLegend +")")
+    .call(heatMapAxis);
+
+    // for(let i = 0; i < attributeGroupNames.length; i++)
+    // {
+    //     svg.append("circle")
+    //         .attr("cx", xLegend)
+    //         .attr("cy", yLegend)
+    //         .attr("r", 6)
+    //         .style("fill", colourScale(attributeGroupNames[i]));
+    //     svg.append("text")
+    //         .attr("x", xLegend + 20)
+    //         .attr("y", yLegend)
+    //         .attr("r", 6)
+    //         .style("font-size", "15px")
+    //         .text(attributeGroupNames[i]);
+    //
+    //     yLegend += 30;
+    // }
 
     //** DATA POINTS *****************************************
     //Create point for each attribute
@@ -161,9 +194,10 @@ scatterPlot = function(data, svg)
                 return xScale(d.year);
             })
             .attr("cy", (d) => yScale(yValue(d)) + + (chartDistance*i))
-            .attr("r", d=> (20 - (d.songyear_pos*2)))           //popularity represented by size
-            .style("fill", colourScale(attributeGroupNames[i]))
-            .style("opacity", "35%")
+            .attr("r", 6)
+            //.attr("r", d=> (d.score/1.5))        //score represented by size
+            .style("fill", d => colourScale(d.songyear_pos))      //popularity represented by heatmap colours
+            .style("opacity", "90%");
     }
 
 };
