@@ -1,5 +1,5 @@
 window.onload = function(){
-    setup("data.csv");
+    setup("TopYearlySongsAndAttributes.csv");
 };
 
 const MARGIN = {
@@ -41,9 +41,8 @@ lineGraph = function (data, svg) {
     let uniqueYears = Array.from(years);
 
     let attributeGroupNames = data.columns.slice(8, 11);    //["energy", "instrumentalness", "valence"]
-    let attributeSeries = d3.stack().keys(attributeGroupNames)(data);
-
-    console.log(attributeSeries);
+    let attributeSeries = d3.group(data, d => d.year);
+    let groupByYearArray = Array.from(attributeSeries);
 
     xScale = d3.scaleLinear()
         .domain([startYear, endYear])
@@ -81,20 +80,29 @@ lineGraph = function (data, svg) {
 
     for(let i = 0; i < attributeGroupNames.length; i++)
     {
-        let y = attributeGroupNames[i];
-        let yValue = function(d) {return d[y]};        //get attribute value for row
-
-        var filter = data.filter(function(d) {return d.songyear_pos == 1});
-
-        var area = d3.area()
-            .x(function(d) { return xScale(d.year); })
-            .y0(height - MARGIN.BOTTOM)
-            .y1(function(d) { return yScale(yValue(d)); });
+        //Calculate average of attribute and push it to data grouped by year
+        for(let j = 0; j < groupByYearArray.length; j++)
+        {
+            let result = 0;
+            for(let k = 0; k < 10; k++)
+            {
+                if(i === 0)
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].energy);
+                if(i === 1)
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].instrumentalness);
+                if(i === 2)
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].valence);
+            }
+            groupByYearArray[j].push(result/10);
+        }
 
         chart.append("path")
-            .datum(filter)
+            .datum(groupByYearArray)
             .attr("class", "area")
-            .attr("d", area)
+            .attr("d", d3.area()
+                .x(function(d) { return xScale(d[0]); })
+                .y0(height - MARGIN.BOTTOM)
+                .y1(function(d) { return yScale(d[i+2]);}))
             .attr('stroke-width', 2)
             .attr('fill', colour(attributeGroupNames[i]))
             .attr('opacity',0.5);
