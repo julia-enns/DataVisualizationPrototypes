@@ -42,8 +42,11 @@ scatterPlot = function(data, svg)
     //** SETUP *****************************************
     let startYear = 1970;
     let endYear = 2020;
+
     let years = d3.group(data, d => d.year);
     let uniqueYears = Array.from(years);
+
+    let decadesList = [1970, 1980, 1990, 2000, 2010];
 
     //create series for each attribute
     let attributeGroupNames = data.columns.slice(8, 11);    //["energy", "instrumentalness", "valence"]
@@ -71,14 +74,15 @@ scatterPlot = function(data, svg)
     let xAxis = d3.axisBottom()
         .scale(xScale)
         .ticks(uniqueYears.length/5)
-        .tickFormat(d3.format("d"));
+        .tickFormat(d3.format("d"))
+        .tickPadding(15);
 
     chart.append("g")
         .attr("transform", "translate("+ 0 + ","+ (height-MARGIN.BOTTOM) +")")
         .call(xAxis);
 
     //Create and draw y axis
-    let yAxis = d3.axisLeft().scale(yScale);
+    let yAxis = d3.axisLeft().scale(yScale).tickPadding(10);
     chart.append("g")
         .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
         .call(yAxis);
@@ -124,30 +128,42 @@ scatterPlot = function(data, svg)
 
     //** DATA POINTS *****************************************
     //Create point for each attribute
-    for(let i = 0; i < attributeGroupNames.length; i++)
-    {
-        let y = attributeGroupNames[i];
-        let yValue = function(d) {return d[y]};        //get attribute value for row
+       for(let i = 0; i < attributeGroupNames.length; i++)
+       {
+           let y = attributeGroupNames[i];
+           let yValue = function(d) {return d[y]};        //get attribute value for row
 
-        data.forEach(function (d) {
-            d[y] = +d[y];
-        });
+           data.forEach(function (d) {
+               d[y] = +d[y];
+           });
 
-        chart.append("g")
-            .selectAll("points" + i)
-            .data(data)
-            .enter()
-            .append("circle")
-            .attr("class", "dot-" + attributeGroupNames[i])
-            .attr("cx", (d) => {
-                return xScale(d.year);
-            })
-            .attr("cy", (d) => yScale(yValue(d)))
-            .attr("r", d=> (6))
-            //.attr("r", d=> (20 - (d.songyear_pos*2)))           //popularity represented by size
-            .style("fill", colourScale(attributeGroupNames[i]))
-            //.style("opacity", "40%")
-            .style("opacity", (d => (100 - (d.songyear_pos * 9))/100));     //popularity represented by opacity
-    }
+           chart.append("g")
+               .selectAll("points")
+               .data(data)
+               .enter()
+               .append("circle")
+               .attr("class", "dot-" + attributeGroupNames[i])
+               .attr("cx", (d) => {
+                   return xScale(d.year);
+               })
+               .attr("cy", (d) => yScale(yValue(d)))
+               //.attr("r", d=> (6))
+               .attr("r", d=> (20 - (d.songyear_pos*2)))           //popularity represented by size
+               .style("fill", colourScale(attributeGroupNames[i]))
+               .style("opacity", "50%")
+       }
+
+       for(let i = 1; i <= decadesList.length; i++)
+       {
+           svg.append("line")
+               .attr("x1", xScale(decadesList[i]))
+               .attr("y1", height - MARGIN.BOTTOM )
+               .attr("x2", xScale(decadesList[i]))
+               .attr("y2", MARGIN.TOP)
+               .style("stroke-width", 2)
+               .style("stroke", "steelblue")
+               .style("stroke-dasharray", ("3, 3"));
+       }
+
 
 };
