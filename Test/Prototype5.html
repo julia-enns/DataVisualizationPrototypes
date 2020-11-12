@@ -45,9 +45,9 @@
             .call(d3.axisLeft(y));
 
         // color palette
-        var color = d3.scaleOrdinal()
+        let color = d3.scaleOrdinal()
             .domain(keys)
-            .range(['#e41a1c','#377eb8','#4daf4a'])
+            .range(["green", "blue", "red"]);
 
         //stack the data?
         var stackedData = d3.stack()

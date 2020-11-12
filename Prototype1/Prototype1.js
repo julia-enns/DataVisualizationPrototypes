@@ -90,9 +90,9 @@ lineGraph = function (data, svg) {
             {
                 if(i === 0)
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].energy);
-                if(i === 1)
+                else if(i === 1)
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].instrumentalness);
-                if(i === 2)
+                else if(i === 2)
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].valence);
             }
             groupByYearArray[j].push(result/10);
@@ -113,5 +113,6 @@ lineGraph = function (data, svg) {
             .attr('stroke-width', 2)
             .attr('fill', 'none');
     }
+    console.log(groupByYearArray);
 
 };
