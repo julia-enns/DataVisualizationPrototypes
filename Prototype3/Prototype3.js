@@ -86,18 +86,18 @@ lineGraph = function (data, svg) {
 
         var filter = data.filter(function(d) {return d.songyear_pos == 1});
 
-        var line = d3.line()
+        var area = d3.area()
             .x(function(d) { return xScale(d.year); })
-            .y(function(d) { return yScale(yValue(d)); })
-            .curve(d3.curveMonotoneX);
+            .y0(height - MARGIN.BOTTOM)
+            .y1(function(d) { return yScale(yValue(d)); });
 
         chart.append("path")
             .datum(filter)
-            .attr("class", "line")
-            .attr("d", line)
-            .attr('stroke', colour(attributeGroupNames[i]))
+            .attr("class", "area")
+            .attr("d", area)
             .attr('stroke-width', 2)
-            .attr('fill', 'none');
+            .attr('fill', colour(attributeGroupNames[i]))
+            .attr('opacity',0.5);
     }
 
 };

@@ -41,6 +41,7 @@ lineGraph = function (data, svg) {
     let uniqueYears = Array.from(years);
 
     let attributeGroupNames = data.columns.slice(8, 11);    //["energy", "instrumentalness", "valence"]
+
     let attributeSeries = d3.stack().keys(attributeGroupNames)(data);
 
     console.log(attributeSeries);
@@ -82,22 +83,27 @@ lineGraph = function (data, svg) {
     for(let i = 0; i < attributeGroupNames.length; i++)
     {
         let y = attributeGroupNames[i];
-        let yValue = function(d) {return d[y]};        //get attribute value for row
+        let yValue1 = function(d) {return d[y]};        //get attribute value for row
+
+        let y1 = attributeGroupNames[i + 1];
+        let yValue2 = function (d) {
+            return height + MARGIN.BOTTOM
+        };
 
         var filter = data.filter(function(d) {return d.songyear_pos == 1});
 
-        var line = d3.line()
+        var area = d3.area()
             .x(function(d) { return xScale(d.year); })
-            .y(function(d) { return yScale(yValue(d)); })
-            .curve(d3.curveMonotoneX);
+            .y0(function(d) { return yScale(yValue2(d)); })
+            .y1(function(d) { return yScale(yValue1(d)); });
 
         chart.append("path")
             .datum(filter)
-            .attr("class", "line")
-            .attr("d", line)
-            .attr('stroke', colour(attributeGroupNames[i]))
+            .attr("class", "area")
+            .attr("d", area)
             .attr('stroke-width', 2)
-            .attr('fill', 'none');
+            .attr('fill', colour(attributeGroupNames[i]))
+            .attr('opacity',0.5);
     }
 
 };
