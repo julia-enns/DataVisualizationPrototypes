@@ -1,5 +1,5 @@
 window.onload = function(){
-    setup("TopYearlySongsAndAttributes.csv");
+    setup("data.csv");
 };
 
 const MARGIN = {

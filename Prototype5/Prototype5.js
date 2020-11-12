@@ -92,15 +92,21 @@ lineGraph = function (data, svg) {
 
         var filter = data.filter(function(d) {return d.songyear_pos == 1});
 
-        var area = d3.area()
-            .x(function(d) { return xScale(d.year); })
-            .y0(function(d) { return yScale(yValue2(d)); })
-            .y1(function(d) { return yScale(yValue1(d)); });
-
-        chart.append("path")
-            .datum(filter)
+        chart.append("g")
+            .selectAll("g")
+            .data(attributeSeries)
+            .enter().append("g")
+            .selectAll("path")
+            .data(function(d){return d;})
+            .enter().append("path")
             .attr("class", "area")
-            .attr("d", area)
+            .attr("d", function(d) {
+                console.log(d);
+                return d3.area()
+                    .x(xScale(d.data.year))
+                    .y0(yScale(d[0]))
+                    .y1(yScale(d[1]));
+            })
             .attr('stroke-width', 2)
             .attr('fill', colour(attributeGroupNames[i]))
             .attr('opacity',0.5);
