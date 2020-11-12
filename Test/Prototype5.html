@@ -1,157 +1,73 @@
 <!DOCTYPE html>
-<style>
+<meta charset="utf-8">
 
-    .axis .domain {
-        display: none;
-    }
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
 
-</style>
-<svg width="960" height="500"></svg>
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+
 <script>
 
-    // Commented version of
-    // https://bl.ocks.org/mbostock/3886208
+    // set the dimensions and margins of the graph
+    var margin = {top: 20, right: 30, bottom: 30, left: 55},
+        width = 460 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
 
-    // Variables
-    var svg = d3.select("svg"),
-        margin = {top: 20, right: 20, bottom: 30, left: 40},
-        width = +svg.attr("width") - margin.left - margin.right,
-        height = +svg.attr("height") - margin.top - margin.bottom;
+    // append the svg object to the body of the page
+    var svg = d3.select("#my_dataviz")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
-    // SVG G to provide D3 Margin Convention
-    var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // Parse the Data
+    d3.csv("data.csv", function(data) {
 
-    // X (horizontal axis) represents the state categories
-    //   - paddingInner provides spacing between bars
-    //   - align specifies unused space in the range and how to distribute it
-    var x = d3.scaleBand()
-        .rangeRound([0, width])
-        .paddingInner(0.05)
-        .align(0.1);
+        // List of groups = header of the csv files
+        var keys = data.columns.slice(8, 11)
 
-    // Y (vertical axis) represents the population in millions
-    var y = d3.scaleLinear()
-        .rangeRound([height, 0]);
-
-    // Z represents the color scheme to be used for the various age groups
-    var z = d3.scaleOrdinal()
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
-
-    // Define variable to give us access to AJAX callback function data
-    var outsideData;
-
-    // CSV AJAX call to ingest data
-    // data file requested: data.csv
-    // function to process data: function(d, i, columns) {...}
-    // function to be used on call back: function(error, data) {...}
-    d3.csv("data.csv", function(d, i, columns) {
-        for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
-        d.total = t;
-        return d;
-    }, function(error, data) {
-        if (error) throw error;
-
-        // assign internal data variable to outsideData variable so we can see data
-        // once the AJAX callback function has been run.
-        outsideData = data;
-
-        // Get the keys by taking a slice off of the column headings
-        // (means remove the element 0, and return array from index 1 to end)
-        // Returns array containing:
-        // "Under 5 Years", "5 to 13 Years", "14 to 17 Years",
-        // "18 to 24 Years", "25 to 44 Years", "45 to 64 Years",
-        // "65 Years and Over"
-        var keys = data.columns.slice(1);
-
-        // JavaScript Array Sort function sorts by total
-        //   - total coming from the d3.scv middle function that added all categories together per state
-        data.sort(function(a, b) { return b.total - a.total; });
-
-        // X axis domain is all the states
-        x.domain(data.map(function(d) { return d.State; }));
-
-        // Y axis domain is the additive total of each state
-        y.domain([0, d3.max(data, function(d) { return d.total; })]).nice();
-
-        // Z color scale needs colors defined so use the keys
-        z.domain(keys);
-
-        // Double Data Join
-        // First data join will give us the states
-        //   - Note that the d3 stack generator is being used
-        //   - We have to define what the keys are for the stack
-        //   - We have to pass in the data to the generator function
-        //   - What the stack does is create layers per key
-        //   - For each state it gives us a layer per category
-        //   - That's why all the states receive the same rectangle fill color
-        //     - So you end up with <g fill="#98abc5">
-        //   - You want to think of each <g> element as a layer
-        // Second data join constructs the rectangles in each G
-        //   - So it takes the d3.stack().keys(keys)(data) generated data for each g
-        //   - And creates a bunch of rectangles within the layer
-        //   - note the d.data.State passed to the ordinal scale function
-        g.append("g")
-            .selectAll("g")
-            .data(d3.stack().keys(keys)(data))
-            .enter().append("g")
-            .attr("fill", function(d) { return z(d.key); })
-            .selectAll("rect")
-            .data(function(d) { return d; })
-            .enter().append("rect")
-            .attr("x", function(d) { return x(d.data.State); })
-            .attr("y", function(d) {
-                console.log(d);
-                return y(d[1]); })
-            .attr("height", function(d) { return y(d[0]) - y(d[1]); })
-            .attr("width", x.bandwidth());
-
-        // Create the X Axis
-        g.append("g")
-            .attr("class", "axis")
+        // Add X axis
+        var x = d3.scaleLinear()
+            .domain(d3.extent(data, function(d) { return d.year; }))
+            .range([ 0, width ]);
+        svg.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x).ticks(5));
 
-        // Create the Y Axis
-        g.append("g")
-            .attr("class", "axis")
-            .call(d3.axisLeft(y).ticks(null, "s"))
-            .append("text")
-            .attr("x", 2)
-            .attr("y", y(y.ticks().pop()) + 0.5)
-            .attr("dy", "0.32em")
-            .attr("fill", "#000")
-            .attr("font-weight", "bold")
-            .attr("text-anchor", "start")
-            .text("Population");
+        // Add Y axis
+        var y = d3.scaleLinear()
+            .domain([0, 1])
+            .range([ height, 0 ]);
+        svg.append("g")
+            .call(d3.axisLeft(y));
 
-        // Create the legend g's
-        // Note the data join
-        // Note the transform translate based on the selection element index
-        var legend = g.append("g")
-            .attr("font-family", "sans-serif")
-            .attr("font-size", 10)
-            .attr("text-anchor", "end")
-            .selectAll("g")
-            .data(keys.slice().reverse())
-            .enter().append("g")
-            .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+        // color palette
+        var color = d3.scaleOrdinal()
+            .domain(keys)
+            .range(['#e41a1c','#377eb8','#4daf4a'])
 
-        // Create rectangles for each legend g
-        // Pass rect index to Z color ordinal scale
-        legend.append("rect")
-            .attr("x", width - 19)
-            .attr("width", 19)
-            .attr("height", 19)
-            .attr("fill", z);
+        //stack the data?
+        var stackedData = d3.stack()
+            .keys(keys)
+            (data)
+        console.log("This is the stack result: ", stackedData)
 
-        // Create text for each legend g
-        // Use the data that it inherts to create the SVG text
-        legend.append("text")
-            .attr("x", width - 24)
-            .attr("y", 9.5)
-            .attr("dy", "0.32em")
-            .text(function(d) { return d; });
-    });
+        // Show the areas
+        svg
+            .selectAll("mylayers")
+            .data(stackedData)
+            .enter()
+            .append("path")
+            .style("fill", function(d) { console.log(d.key) ; return color(d.key); })
+            .attr("d", d3.area()
+                .x(function(d, i) { return x(d.data.year); })
+                .y0(function(d) { return y(d[0]); })
+                .y1(function(d) { return y(d[1]); })
+            )
+
+    })
 
 </script>
