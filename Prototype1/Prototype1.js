@@ -26,7 +26,7 @@ setup = function (dataPath) {
     data = d3.csv(dataPath)
         .then(function (data)
         {
-            console.log(data);
+            //console.log(data);
             line = new lineGraph(data, SVG);
         })
 
@@ -42,8 +42,7 @@ lineGraph = function (data, svg) {
 
     let attributeGroupNames = data.columns.slice(8, 11);    //["energy", "instrumentalness", "valence"]
     let attributeSeries = d3.group(data, d => d.year);
-
-    console.log(attributeSeries);
+    let groupByYearArray = Array.from(attributeSeries);
 
     xScale = d3.scaleLinear()
         .domain([startYear, endYear])
@@ -79,36 +78,37 @@ lineGraph = function (data, svg) {
         .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
         .call(yAxis);
 
+    //console.log(attributeSeries);
+
     for(let i = 0; i < attributeGroupNames.length; i++)
     {
-        let y = attributeGroupNames[i];
-        let yValue = function(d) {return d[y]};//get attribute value for row
-
-
-        var filter = data.filter(function(d) {return d.songyear_pos == 1});
-        //
-        // let average = function(d) {
-        //     let result = 0;
-        //     for(let j = 0; j < d.length; j++){
-        //         if(i === 0)
-        //             result = parseFloat(result) + parseFloat(d[j].energy);
-        //         if(i === 1)
-        //             result = parseFloat(result) + parseFloat(d[j].instrumentalness);
-        //         if(i === 2)
-        //             result = parseFloat(result) + parseFloat(d[j].valence);
-        //     }
-        //     return result / d.length;
-        // };
-
-        var line = d3.line()
-            .x(function(d) { return xScale(d.year); })
-            .y(function(d) {return yScale(d[1][0].energy); })
-            .curve(d3.curveMonotoneX);
+        //Calculate average of attribute and push it to data grouped by year
+        for(let j = 0; j < groupByYearArray.length; j++)
+        {
+            let result = 0;
+            for(let k = 0; k < 10; k++)
+            {
+                if(i === 0)
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].energy);
+                if(i === 1)
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].instrumentalness);
+                if(i === 2)
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].valence);
+            }
+            groupByYearArray[j].push(result/10);
+        }
 
         chart.append("path")
-            .datum(attributeSeries)
+            .datum(groupByYearArray)
             .attr("class", "line")
-            .attr("d", line)
+            .attr("d", d3.line()
+                .x(function(d)
+                {
+                    //console.log(d)
+                    return xScale(d[0]); })
+                .y(function(d) {return yScale(d[i+2] )})
+                .curve(d3.curveMonotoneX)
+            )
             .attr('stroke', colour(attributeGroupNames[i]))
             .attr('stroke-width', 2)
             .attr('fill', 'none');
