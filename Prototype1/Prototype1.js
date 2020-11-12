@@ -1,5 +1,5 @@
 window.onload = function(){
-    setup("data.csv");
+    setup("TopYearlySongsAndAttributes.csv");
 };
 
 const MARGIN = {
@@ -41,7 +41,7 @@ lineGraph = function (data, svg) {
     let uniqueYears = Array.from(years);
 
     let attributeGroupNames = data.columns.slice(8, 11);    //["energy", "instrumentalness", "valence"]
-    let attributeSeries = d3.stack().keys(attributeGroupNames)(data);
+    let attributeSeries = d3.group(data, d => d.year);
 
     console.log(attributeSeries);
 
@@ -82,17 +82,31 @@ lineGraph = function (data, svg) {
     for(let i = 0; i < attributeGroupNames.length; i++)
     {
         let y = attributeGroupNames[i];
-        let yValue = function(d) {return d[y]};        //get attribute value for row
+        let yValue = function(d) {return d[y]};//get attribute value for row
+
 
         var filter = data.filter(function(d) {return d.songyear_pos == 1});
+        //
+        // let average = function(d) {
+        //     let result = 0;
+        //     for(let j = 0; j < d.length; j++){
+        //         if(i === 0)
+        //             result = parseFloat(result) + parseFloat(d[j].energy);
+        //         if(i === 1)
+        //             result = parseFloat(result) + parseFloat(d[j].instrumentalness);
+        //         if(i === 2)
+        //             result = parseFloat(result) + parseFloat(d[j].valence);
+        //     }
+        //     return result / d.length;
+        // };
 
         var line = d3.line()
             .x(function(d) { return xScale(d.year); })
-            .y(function(d) { return yScale(yValue(d)); })
+            .y(function(d) {return yScale(d[1][0].energy); })
             .curve(d3.curveMonotoneX);
 
         chart.append("path")
-            .datum(filter)
+            .datum(attributeSeries)
             .attr("class", "line")
             .attr("d", line)
             .attr('stroke', colour(attributeGroupNames[i]))

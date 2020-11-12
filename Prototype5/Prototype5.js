@@ -52,7 +52,7 @@ lineGraph = function (data, svg) {
 
 
     yScale = d3.scaleLinear()
-        .domain([0, 1])
+        .domain([0, 3])
         .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
 
@@ -96,20 +96,23 @@ lineGraph = function (data, svg) {
             .selectAll("g")
             .data(attributeSeries)
             .enter().append("g")
+            .attr("fill", colour(attributeGroupNames[i]))
             .selectAll("path")
-            .data(function(d){return d;})
+            .data(function(d) { return d; })
             .enter().append("path")
-            .attr("class", "area")
-            .attr("d", function(d) {
-                console.log(d);
-                return d3.area()
-                    .x(xScale(d.data.year))
-                    .y0(yScale(d[0]))
-                    .y1(yScale(d[1]));
-            })
-            .attr('stroke-width', 2)
-            .attr('fill', colour(attributeGroupNames[i]))
-            .attr('opacity',0.5);
+            .attr("x", function(d) { return xScale(d.data.year); })
+            .attr("y", function(d) { return yScale(d[1]); })
+            .attr("height", function(d) { return yScale(d[0]) - yScale(d[1]); })
+            .attr("width", 5);
+
+
+        // chart.selectAll("g")
+        //     .data(attributeSeries)
+        //     .enter().append("path")
+        //     .attr("d", d3.area()
+        //         .x(function(d, i) { return xScale(d.data.year); })
+        //         .y0(function(d) { return yScale(d[0]); })
+        //         .y1(function(d) { return yScale(d[1]); }))
     }
 
 };
