@@ -189,7 +189,7 @@ scatterPlot = function(data, svg)
                .style("opacity", "50%")
        }
 
-       for(let i = 1; i <= decadesList.length; i++)
+       for(let i = 1; i < decadesList.length; i++)
        {
            svg.append("line")
                .attr("x1", xScale(decadesList[i]))
