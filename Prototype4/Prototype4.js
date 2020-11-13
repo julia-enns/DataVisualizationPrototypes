@@ -147,6 +147,12 @@ scatterPlot = function(data, svg)
     let yPosLegend = MARGIN.BOTTOM;
     let legendWidth = 50;
     let legendHeight = 300;
+
+    svg.append("text")
+        .attr("x", xPosLegend - 10)
+        .attr("y", yPosLegend - 20)
+        .text("Yearly Song Rank")
+
     svg.append("rect")
         .attr("x", xPosLegend)
         .attr("y", yPosLegend)

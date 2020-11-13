@@ -69,6 +69,12 @@ scatterPlot = function(data, svg)
         .domain(attributeGroupNames)
         .range(["green", "blue", "red"]);
 
+    //Size Scale, calculates the radius of the data point based on song year position (rank)
+    let sizeScale = function(rank)
+    {
+        return 22 - (rank*2);
+    }
+
     //** CREATE AXIS *****************************************
     //Create and draw x axis
     let xAxis = d3.axisBottom()
@@ -106,9 +112,16 @@ scatterPlot = function(data, svg)
         .attr("y", height/2 - 50)
         .text(yLabel);
 
-    //Draw legend
+    //** CREATE LEGEND *****************************************
     xLegend = width;
     yLegend = MARGIN.BOTTOM;
+
+    //Colour encoding
+    chart.append("text")
+        .attr("x", xLegend)
+        .attr("y", yLegend - 30)
+        .attr("font-weight", "bold")
+        .text("Attributes")
     for(let i = 0; i < attributeGroupNames.length; i++)
     {
         chart.append("circle")
@@ -124,6 +137,29 @@ scatterPlot = function(data, svg)
             .text(attributeGroupNames[i]);
 
         yLegend += 30;
+    }
+
+    //Size Legend
+    yLegend += 30;
+    chart.append("text")
+        .attr("x", xLegend - 10)
+        .attr("y", yLegend)
+        .attr("font-weight", "bold")
+        .text("Yearly Song Rank")
+    for(let i = 1; i <= 10; i++)
+    {
+        yLegend += 50;
+        chart.append("circle")
+            .attr("cx", xLegend)
+            .attr("cy", yLegend)
+            .attr("r", d => sizeScale(i))
+            .style("fill", "black")
+            .style("opacity", "50%");
+        chart.append("text")
+            .attr("x", xLegend + 40)
+            .attr("y", yLegend)
+            .style("font-size", "15px")
+            .text(i);
     }
 
     //** DATA POINTS *****************************************
@@ -148,7 +184,7 @@ scatterPlot = function(data, svg)
                })
                .attr("cy", (d) => yScale(yValue(d)))
                //.attr("r", d=> (6))
-               .attr("r", d=> (20 - (d.songyear_pos*2)))           //popularity represented by size
+               .attr("r", d=> (sizeScale(d.songyear_pos)))           //popularity represented by size
                .style("fill", colourScale(attributeGroupNames[i]))
                .style("opacity", "50%")
        }
