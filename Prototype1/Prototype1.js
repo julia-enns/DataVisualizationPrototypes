@@ -26,14 +26,18 @@ setup = function (dataPath) {
     data = d3.csv(dataPath)
         .then(function (data)
         {
-            //console.log(data);
-            line = new lineGraph(data, SVG);
+            console.log(data);
+            scatter = new scatterPlot(data, SVG);
         })
 
 };
 
-
-lineGraph = function (data, svg)
+/**
+ * Scatter Plot Chart object
+ * @param data
+ * @param svg
+ */
+scatterPlot = function(data, svg)
 {
     //** SETUP *****************************************
     let startYear = 1970;
@@ -41,40 +45,45 @@ lineGraph = function (data, svg)
     let years = d3.group(data, d => d.year);
     let uniqueYears = Array.from(years);
 
+    //create series for each attribute
     let attributeGroupNames = data.columns.slice(8, 11);    //["energy", "instrumentalness", "valence"]
-    let attributeSeries = d3.group(data, d => d.year);
-    let groupByYearArray = Array.from(attributeSeries);
 
+    //Creates group for scatter plot
     chart = svg.append('g')
-        .attr("class", "lineGraph")
+        .attr("class", "scatterPlot")
 
     //** SCALES *****************************************
     xScale = d3.scaleLinear()
         .domain([startYear, endYear])
         .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
 
-
     yScale = d3.scaleLinear()
         .domain([0, 1])
         .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
-
-    let colour = d3.scaleOrdinal()
+    //Colour Scale for each attribute
+    let colourScale = d3.scaleOrdinal()
         .domain(attributeGroupNames)
         .range(["green", "blue", "red"]);
 
+    //Opacity scale for rank
+    let opacity = function(rank)
+    {
+        return (100 - (rank * 9))/100;
+    }
 
     //** CREATE AXIS *****************************************
+    //Create and draw x axis
     let xAxis = d3.axisBottom()
         .scale(xScale)
         .ticks(uniqueYears.length/5)
         .tickFormat(d3.format("d"));
 
-
     chart.append("g")
         .attr("transform", "translate("+ 0 + ","+ (height-MARGIN.BOTTOM) +")")
         .call(xAxis);
 
+    //Create and draw y axis
     let yAxis = d3.axisLeft().scale(yScale);
     chart.append("g")
         .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
@@ -109,55 +118,73 @@ lineGraph = function (data, svg)
         .attr("y", yLegend - 30)
         .attr("font-weight", "bold")
         .text("Attributes")
-
     for(let i = 0; i < attributeGroupNames.length; i++)
     {
         chart.append("circle")
             .attr("cx", xLegend)
             .attr("cy", yLegend)
             .attr("r", 6)
-            .style("fill", colour(attributeGroupNames[i]));
+            .style("fill", colourScale(attributeGroupNames[i]));
         chart.append("text")
             .attr("x", xLegend + 20)
             .attr("y", yLegend)
+            .attr("r", 6)
             .style("font-size", "15px")
             .text(attributeGroupNames[i]);
 
         yLegend += 30;
     }
 
+    //Opacity Legend
+    yLegend += 30;
+    chart.append("text")
+        .attr("x", xLegend)
+        .attr("y", yLegend)
+        .attr("font-weight", "bold")
+        .text("Yearly Song Rank")
+    for(let i = 1; i <= 10; i++)
+    {
+        yLegend += 30;
+        chart.append("circle")
+            .attr("cx", xLegend)
+            .attr("cy", yLegend)
+            .attr("r", 6)
+            .style("fill", "black")
+            .style("opacity", (d => opacity(i)));
+        chart.append("text")
+            .attr("x", xLegend + 20)
+            .attr("y", yLegend)
+            .style("font-size", "15px")
+            .text(i);
+
+    }
+
     //** DATA POINTS *****************************************
+    //Create point for each attribute
     for(let i = 0; i < attributeGroupNames.length; i++)
     {
-        //Calculate average of attribute and push it to data grouped by year
-        for(let j = 0; j < groupByYearArray.length; j++)
-        {
-            let result = 0;
-            for(let k = 0; k < 10; k++)
-            {
-                if(attributeGroupNames[i] === "energy")
-                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].energy);
-                else if(attributeGroupNames[i] === "instrumentalness")
-                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].instrumentalness);
-                else if(attributeGroupNames[i] === "valence")
-                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].valence);
-            }
-            groupByYearArray[j].push(result/10);
-        }
+        let y = attributeGroupNames[i];
+        let yValue = function(d) {return d[y]};        //get attribute value for row
 
-        chart.append("path")
-            .datum(groupByYearArray)
-            .attr("class", "line")
-            .attr("d", d3.line()
-                .x(function(d)
-                {return xScale(d[0]); })
-                .y(function(d) {return yScale(d[i+2] )})
-                .curve(d3.curveMonotoneX)
-            )
-            .attr('stroke', colour(attributeGroupNames[i]))
-            .attr('stroke-width', 2)
-            .attr('fill', 'none');
+        data.forEach(function (d) {
+            d[y] = +d[y];
+        });
+
+        chart.append("g")
+            .selectAll("points" + i)
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("class", "dot-" + attributeGroupNames[i])
+            .attr("cx", (d) => {
+                return xScale(d.year);
+            })
+            .attr("cy", (d) => yScale(yValue(d)))
+            .attr("r", 6)
+            .style("fill", colourScale(attributeGroupNames[i]))
+            // .style("opacity", (d => (100 - (d.songyear_pos * 9))/100));     //popularity represented by opacity
+            .style("opacity", (d => opacity(d.songyear_pos)));     //popularity represented by opacity
+
     }
-    console.log(groupByYearArray);
 
 };

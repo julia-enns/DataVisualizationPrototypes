@@ -8,12 +8,113 @@
 </head>
 
 <body>
+<!-- Create a div where the graph will take place -->
 <div id="MAIN" class="relative">
-    <H1 style="margin-left:50px">Prototype 3:</H1>
-    <p>Similar to the first prototype, the third variation of the scatter plot graphs uses a single graph and colour encodings to represent the different song attributes. However, the size of the data point is used to represent the song rank instead of colour luminance. While area is an encoding that is more challenging to decipher for ordinal data types, it makes the trends slightly more recognizable than the first prototype. The dotted vertical lines also assist in distinguishing the different decades.
-    </p>
     <svg id="SVG_CONTAINER"></svg>
 </div>
 
 </body>
 </html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<meta charset="utf-8">-->
+
+<!--&lt;!&ndash; Load d3.js &ndash;&gt;-->
+<!--<script src="https://d3js.org/d3.v6.min.js"></script>-->
+
+<!--&lt;!&ndash; Create a div where the graph will take place &ndash;&gt;-->
+<!--<div id="my_dataviz"></div>-->
+
+<!--<script>-->
+
+<!--    // set the dimensions and margins of the graph-->
+<!--    var margin = {top: 20, right: 30, bottom: 30, left: 55},-->
+<!--        width = 460 - margin.left - margin.right,-->
+<!--        height = 400 - margin.top - margin.bottom;-->
+
+<!--    // append the svg object to the body of the page-->
+<!--    var svg = d3.select("#my_dataviz")-->
+<!--        .append("svg")-->
+<!--        .attr("width", width + margin.left + margin.right)-->
+<!--        .attr("height", height + margin.top + margin.bottom)-->
+<!--        .append("g")-->
+<!--        .attr("transform",-->
+<!--            "translate(" + margin.left + "," + margin.top + ")");-->
+
+
+<!--    // Parse the Data-->
+<!--    d3.csv("data.csv", function(data) -->
+<!--    {-->
+
+<!--        // List of groups = header of the csv files-->
+
+<!--        console.log(data);-->
+<!--        let keys = data.columns.slice(8, 11);-->
+
+
+<!--        // Add X axis-->
+<!--        var x = d3.scaleLinear()-->
+<!--            .domain(d3.extent(data, function(d) { return d.year; }))-->
+<!--            .range([ 0, width ]);-->
+<!--        svg.append("g")-->
+<!--            .attr("transform", "translate(0," + height + ")")-->
+<!--            .call(d3.axisBottom(x).ticks(10).tickFormat(d3.format("d")));-->
+
+
+
+<!--        // Add Y axis-->
+<!--        var y = d3.scaleLinear()-->
+<!--            .domain([0, 3])-->
+<!--            .range([ height, 0 ]);-->
+<!--        svg.append("g")-->
+<!--            .call(d3.axisLeft(y));-->
+
+<!--        // color palette-->
+<!--        let color = d3.scaleOrdinal()-->
+<!--            .domain(keys)-->
+<!--            .range(["green", "blue", "red"]);-->
+
+<!--        //-->
+<!--        // let attributeSeries = d3.group(data, d => d.year);-->
+<!--        // let groupByYearArray = Array.from(attributeSeries);-->
+<!--        // for(let i = 0; i < keys.length; i++) {-->
+<!--        //     for (let j = 0; j < groupByYearArray.length; j++) {-->
+<!--        //         let result = 0;-->
+<!--        //         for (let k = 0; k < 10; k++) {-->
+<!--        //             if (i === 0)-->
+<!--        //                 result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].energy);-->
+<!--        //             else if (i === 1)-->
+<!--        //                 result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].instrumentalness);-->
+<!--        //             else if (i === 2)-->
+<!--        //                 result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].valence);-->
+<!--        //         }-->
+<!--        //         groupByYearArray[j].push(result / 10);-->
+<!--        //     }-->
+<!--        // }-->
+
+
+<!--        //stack the data?-->
+<!--        var stackedData = d3.stack()-->
+<!--            .keys(keys)-->
+<!--            (data)-->
+<!--        console.log("This is the stack result: ", stackedData)-->
+
+
+
+<!--        // Show the areas-->
+<!--        svg-->
+<!--            .selectAll("mylayers")-->
+<!--            .data(stackedData)-->
+<!--            .enter()-->
+<!--            .append("path")-->
+<!--            .style("fill", function(d) { console.log(d.key) ; return color(d.key); })-->
+<!--            .attr("d", d3.area()-->
+<!--                .x(function(d, i) { return x(d.data.year); })-->
+<!--                .y0(function(d) { return y(d[0]); })-->
+<!--                .y1(function(d) { return y(d[1]); })-->
+<!--            )-->
+
+<!--    })-->
+
+<!--</script>-->

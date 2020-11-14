@@ -11,7 +11,7 @@ const MARGIN = {
 
 //dimension of our workspace
 const   width  = 1500,
-    height = 800;
+    height = 1000;
 
 /**
  * This function loads the data and calls other necessary functions to create our visualization
@@ -26,18 +26,14 @@ setup = function (dataPath) {
     data = d3.csv(dataPath)
         .then(function (data)
         {
-            console.log(data);
-            scatter = new scatterPlot(data, SVG);
+            //console.log(data);
+            line = new lineGraph(data, SVG);
         })
 
 };
 
-/**
- * Scatter Plot Chart object
- * @param data
- * @param svg
- */
-scatterPlot = function(data, svg)
+
+lineGraph = function (data, svg)
 {
     //** SETUP *****************************************
     let startYear = 1970;
@@ -45,156 +41,123 @@ scatterPlot = function(data, svg)
     let years = d3.group(data, d => d.year);
     let uniqueYears = Array.from(years);
 
-    //create series for each attribute
     let attributeGroupNames = data.columns.slice(8, 11);    //["energy", "instrumentalness", "valence"]
+    let attributeSeries = d3.group(data, d => d.year);
+    let groupByYearArray = Array.from(attributeSeries);
 
-    //Creates group for scatter plot
-    chartEnergy = svg.append('g')
-        .attr("class", "scatterPlot")
-    chartInstrumental = svg.append('g')
-        .attr("class", "scatterPlot")
-    chartValence = svg.append('g')
-        .attr("class", "scatterPlot")
-
-    chartArray = [chartEnergy, chartInstrumental, chartValence];
-
-    //Height between charts for vertical transformation
-    let padding = 20;
-    let chartDistance = padding + height-MARGIN.BOTTOM-MARGIN.TOP;
-
-    //Sort data by lowest rank to highest rank (songyear_pos)
-    //so that higher ranked data points show up in front of lower ranked
-    data.sort(function(x, y){
-        return d3.descending(x.songyear_pos, y.songyear_pos);
-    })
+    chart = svg.append('g')
+        .attr("class", "lineGraph")
 
     //** SCALES *****************************************
     xScale = d3.scaleLinear()
         .domain([startYear, endYear])
         .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
 
+
     yScale = d3.scaleLinear()
         .domain([0, 1])
         .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
 
-    //Colour Scale for rank (heatmap)
-    let heatMapColours = ["#1F2D86", "#3E9583", "#FFFFDD"]
-    let colourScale = d3.scaleLinear()
-        .domain([0, 5, 10])
-        .range(heatMapColours);
+    let colour = d3.scaleOrdinal()
+        .domain(attributeGroupNames)
+        .range(["green", "blue", "red"]);
+
 
     //** CREATE AXIS *****************************************
-    //Create and draw x axis
     let xAxis = d3.axisBottom()
         .scale(xScale)
         .ticks(uniqueYears.length/5)
         .tickFormat(d3.format("d"));
 
-    //Create and draw y axis
+
+    chart.append("g")
+        .attr("transform", "translate("+ 0 + ","+ (height-MARGIN.BOTTOM) +")")
+        .call(xAxis);
+
     let yAxis = d3.axisLeft().scale(yScale);
+    chart.append("g")
+        .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
+        .call(yAxis);
 
-    //Draw axis and labels
-    for(let i = 0; i < attributeGroupNames.length; i++)
-    {
-        //xAxis
-        chartArray[i].append("g")
-            .attr("transform", "translate("+ 0 + ","+ ((height-MARGIN.BOTTOM) + (chartDistance*i)) +")")
-            .call(xAxis);
-
-        //yAxis
-        chartArray[i].append("g")
-            .attr("transform", "translate("+ MARGIN.LEFT + "," + (chartDistance*i) +")")
-            .call(yAxis);
-
-        //yAxis label
-        let yLabel = attributeGroupNames[i];
-        chartArray[i].append("text")
-            .attr("class", "y_label")
-            .attr("text-anchor", "end")
-            .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + ( chartDistance*(i+1) - MARGIN.BOTTOM )+")")
-            .attr("x", MARGIN.LEFT - 40)
-            .attr("y", (chartDistance*(i+1) - MARGIN.BOTTOM))
-            .text(yLabel);
-    }
-
-    //Add x Axis label
+    //Create x and y axis labels
     let xLabel = "Year";
-    svg.append("text")
+    let yLabel = "Attribute Measurement"
+
+    chart.append("text")
         .attr("class", "x_label")
         .attr("text-anchor", "end")
         .attr("x", width/2 + 50)
-        .attr("y", (height-MARGIN.BOTTOM ) * 3 - MARGIN.TOP)
+        .attr("y", height-MARGIN.BOTTOM + 50)
         .text(xLabel);
 
+    chart.append("text")
+        .attr("class", "y_label")
+        .attr("text-anchor", "end")
+        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2 - MARGIN.TOP)+")")
+        .attr("x", MARGIN.LEFT - 40)
+        .attr("y", height/2 - MARGIN.TOP)
+        .text(yLabel);
+
     //** CREATE LEGEND *****************************************
-    //Define linear gradient of legend
-    var linearGradient = svg.append("defs")
-        .append("linearGradient")
-        .attr("id", "linear-gradient")
-        .attr("x1", "0%")
-        .attr("y1", "0%")
-        .attr("x2", "0%")
-        .attr("y2", "100%");
-    linearGradient.selectAll("stop")
-        .data( colourScale.range() )
-        .enter().append("stop")
-        .attr("offset", function(d,i) { return i/(colourScale.range().length-1); })
-        .attr("stop-color", function(d) { return d; });
+    xLegend = width;
+    yLegend = MARGIN.BOTTOM;
 
-    //Rectangle legend
-    let xPosLegend = width;
-    let yPosLegend = MARGIN.BOTTOM;
-    let legendWidth = 50;
-    let legendHeight = 300;
+    //Colour encoding
+    chart.append("text")
+        .attr("x", xLegend)
+        .attr("y", yLegend - 30)
+        .attr("font-weight", "bold")
+        .text("Attributes")
 
-    svg.append("text")
-        .attr("x", xPosLegend - 10)
-        .attr("y", yPosLegend - 20)
-        .text("Yearly Song Rank")
-
-    svg.append("rect")
-        .attr("x", xPosLegend)
-        .attr("y", yPosLegend)
-        .attr("width", legendWidth)
-        .attr("height", legendHeight)
-        .style("fill", "url(#linear-gradient)");
-
-    //Define legend axis scale
-    let heatMapAxisScale = d3.scaleLinear()
-        .range([0, legendHeight])
-        .domain([1, 10]);
-    let heatMapAxis = d3.axisLeft().ticks(10).scale(heatMapAxisScale);
-    svg.append("g")
-    .attr("transform", "translate("+ xPosLegend + ","+ yPosLegend +")")
-    .call(heatMapAxis);
-
-    //** DATA POINTS *****************************************
-    //Create point for each attribute
     for(let i = 0; i < attributeGroupNames.length; i++)
     {
-        let y = attributeGroupNames[i];
-        let yValue = function(d) {return d[y]};        //get attribute value for row
-
-        data.forEach(function (d) {
-            d[y] = +d[y];
-        });
-
-        chartArray[i].append("g")
-            .selectAll("points" + i)
-            .data(data)
-            .enter()
-            .append("circle")
-            .attr("class", "dot-" + attributeGroupNames[i])
-            .attr("cx", (d) =>
-            {
-                return xScale(d.year);
-            })
-            .attr("cy", (d) => yScale(yValue(d)) + + (chartDistance*i))
+        chart.append("circle")
+            .attr("cx", xLegend)
+            .attr("cy", yLegend)
             .attr("r", 6)
-            //.attr("r", d=> (d.score/1.5))        //score represented by size
-            .style("fill", d => colourScale(d.songyear_pos))      //popularity represented by heatmap colours
-            .style("opacity", "80%");
+            .style("fill", colour(attributeGroupNames[i]));
+        chart.append("text")
+            .attr("x", xLegend + 20)
+            .attr("y", yLegend)
+            .style("font-size", "15px")
+            .text(attributeGroupNames[i]);
+
+        yLegend += 30;
     }
+
+    //** DATA POINTS *****************************************
+    for(let i = 0; i < attributeGroupNames.length; i++)
+    {
+        //Calculate average of attribute and push it to data grouped by year
+        for(let j = 0; j < groupByYearArray.length; j++)
+        {
+            let result = 0;
+            for(let k = 0; k < 10; k++)
+            {
+                if(attributeGroupNames[i] === "energy")
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].energy);
+                else if(attributeGroupNames[i] === "instrumentalness")
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].instrumentalness);
+                else if(attributeGroupNames[i] === "valence")
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].valence);
+            }
+            groupByYearArray[j].push(result/10);
+        }
+
+        chart.append("path")
+            .datum(groupByYearArray)
+            .attr("class", "line")
+            .attr("d", d3.line()
+                .x(function(d)
+                {return xScale(d[0]); })
+                .y(function(d) {return yScale(d[i+2] )})
+                .curve(d3.curveMonotoneX)
+            )
+            .attr('stroke', colour(attributeGroupNames[i]))
+            .attr('stroke-width', 2)
+            .attr('fill', 'none');
+    }
+    console.log(groupByYearArray);
 
 };

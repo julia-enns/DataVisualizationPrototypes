@@ -1,5 +1,5 @@
 #SVG_CONTAINER{
-    height: 1080px;
+    height: 3000px;
     width: 1920px;
 }
 
@@ -7,10 +7,9 @@ circle {
     stroke:#ccc;
 }
 
-
 p
 {
-   font-size: 160%;
+    font-size: 160%;
     width:1500px;
     margin:20px 100px;
 }
