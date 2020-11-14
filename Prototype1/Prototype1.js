@@ -103,9 +103,7 @@ lineGraph = function (data, svg) {
             .attr("class", "line")
             .attr("d", d3.line()
                 .x(function(d)
-                {
-                    //console.log(d)
-                    return xScale(d[0]); })
+                {return xScale(d[0]); })
                 .y(function(d) {return yScale(d[i+2] )})
                 .curve(d3.curveMonotoneX)
             )
