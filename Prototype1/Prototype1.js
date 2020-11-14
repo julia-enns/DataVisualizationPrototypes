@@ -33,8 +33,9 @@ setup = function (dataPath) {
 };
 
 
-lineGraph = function (data, svg) {
-
+lineGraph = function (data, svg)
+{
+    //** SETUP *****************************************
     let startYear = 1970;
     let endYear = 2020;
     let years = d3.group(data, d => d.year);
@@ -44,6 +45,10 @@ lineGraph = function (data, svg) {
     let attributeSeries = d3.group(data, d => d.year);
     let groupByYearArray = Array.from(attributeSeries);
 
+    chart = svg.append('g')
+        .attr("class", "lineGraph")
+
+    //** SCALES *****************************************
     xScale = d3.scaleLinear()
         .domain([startYear, endYear])
         .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
@@ -59,9 +64,7 @@ lineGraph = function (data, svg) {
         .range(["green", "blue", "red"]);
 
 
-    chart = svg.append('g')
-        .attr("class", "lineGraph")
-
+    //** CREATE AXIS *****************************************
     let xAxis = d3.axisBottom()
         .scale(xScale)
         .ticks(uniqueYears.length/5)
@@ -72,14 +75,58 @@ lineGraph = function (data, svg) {
         .attr("transform", "translate("+ 0 + ","+ (height-MARGIN.BOTTOM) +")")
         .call(xAxis);
 
-
     let yAxis = d3.axisLeft().scale(yScale);
     chart.append("g")
         .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
         .call(yAxis);
 
-    //console.log(attributeSeries);
+    //Create x and y axis labels
+    let xLabel = "Year";
+    let yLabel = "Attribute Measurement"
 
+    chart.append("text")
+        .attr("class", "x_label")
+        .attr("text-anchor", "end")
+        .attr("x", width/2 + 50)
+        .attr("y", height-MARGIN.BOTTOM + 50)
+        .text(xLabel);
+
+    chart.append("text")
+        .attr("class", "y_label")
+        .attr("text-anchor", "end")
+        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2 - MARGIN.TOP)+")")
+        .attr("x", MARGIN.LEFT - 40)
+        .attr("y", height/2 - MARGIN.TOP)
+        .text(yLabel);
+
+    //** CREATE LEGEND *****************************************
+    xLegend = width;
+    yLegend = MARGIN.BOTTOM;
+
+    //Colour encoding
+    chart.append("text")
+        .attr("x", xLegend)
+        .attr("y", yLegend - 30)
+        .attr("font-weight", "bold")
+        .text("Attributes")
+
+    for(let i = 0; i < attributeGroupNames.length; i++)
+    {
+        chart.append("circle")
+            .attr("cx", xLegend)
+            .attr("cy", yLegend)
+            .attr("r", 6)
+            .style("fill", colour(attributeGroupNames[i]));
+        chart.append("text")
+            .attr("x", xLegend + 20)
+            .attr("y", yLegend)
+            .style("font-size", "15px")
+            .text(attributeGroupNames[i]);
+
+        yLegend += 30;
+    }
+
+    //** DATA POINTS *****************************************
     for(let i = 0; i < attributeGroupNames.length; i++)
     {
         //Calculate average of attribute and push it to data grouped by year
@@ -88,11 +135,11 @@ lineGraph = function (data, svg) {
             let result = 0;
             for(let k = 0; k < 10; k++)
             {
-                if(i === 0)
+                if(attributeGroupNames[i] === "energy")
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].energy);
-                else if(i === 1)
+                else if(attributeGroupNames[i] === "instrumentalness")
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].instrumentalness);
-                else if(i === 2)
+                else if(attributeGroupNames[i] === "valence")
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].valence);
             }
             groupByYearArray[j].push(result/10);
