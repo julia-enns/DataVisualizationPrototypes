@@ -6,3 +6,11 @@
 circle {
     stroke:#ccc;
 }
+
+
+p
+{
+   font-size: 160%;
+    width:1500px;
+    margin:20px 100px;
+}

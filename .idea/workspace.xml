@@ -27,7 +27,12 @@
   <component name="ChangeListManager">
     <list default="true" id="75273c95-06f7-40ed-9710-5148ccf3ec24" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Prototype6/Prototype6.js" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/Prototype6.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype2/Prototype2.html" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype2/Prototype2.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype2/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype2/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype4/Prototype4.html" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype4/Prototype4.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype4/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype4/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype6/Prototype6.html" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/Prototype6.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype6/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +43,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1kDWJTT0sEYlZ0vNa7wJgLMKC0W" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -45,9 +51,15 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Prototype4" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
-  <component name="RunManager" selected="JavaScript Debug.Prototype4.html">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Alyssa\OneDrive\Documents\GitHub\DataVisualizationPrototypes\Prototype4" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JavaScript Debug.Prototype6.html">
     <configuration name="Prototype2.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/DataVisualizationPrototypes/Prototype2/Prototype2.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
@@ -59,9 +71,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JavaScript Debug.Prototype6.html" />
         <item itemvalue="JavaScript Debug.Prototype4.html" />
         <item itemvalue="JavaScript Debug.Prototype2.html" />
-        <item itemvalue="JavaScript Debug.Prototype6.html" />
       </list>
     </recent_temporary>
   </component>
