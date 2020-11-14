@@ -38,8 +38,8 @@ lineGraph = function (data) {
     // append the svg object to the body of the page
     var svg = d3.select("#SVG_CONTAINER")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        // .attr("width", width + margin.left + margin.right)
+        // .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
@@ -91,6 +91,32 @@ lineGraph = function (data) {
         .attr("y", height / 2 - MARGIN.LEFT * 2)
         .text(yLabel);
 
+    let xLegend = width;
+    let yLegend = MARGIN.TOP;
+
+    //Colour encoding
+    svg.append("text")
+        .attr("x", xLegend)
+        .attr("y", yLegend - 30)
+        .attr("font-weight", "bold")
+        .text("Attributes")
+
+    for(let i = 0; i < attributes.length; i++)
+    {
+        svg.append("circle")
+            .attr("cx", xLegend)
+            .attr("cy", yLegend)
+            .attr("r", 6)
+            .style("fill", color(attributes[i]));
+        svg.append("text")
+            .attr("x", xLegend + 20)
+            .attr("y", yLegend)
+            .style("font-size", "10px")
+            .text(attributes[i]);
+
+        yLegend += 20;
+    }
+
     //Calculate averages
     let attributeSeries = d3.group(data, d => d.year);
     let groupByYearArray = Array.from(attributeSeries);
@@ -98,11 +124,11 @@ lineGraph = function (data) {
         for (let j = 0; j < groupByYearArray.length; j++) {
             let result = 0;
             for (let k = 0; k < 10; k++) {
-                if (i === 0)
+                if(attributes[i] === "energy")
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].energy);
-                else if (i === 1)
+                else if(attributes[i] === "instrumentalness")
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].instrumentalness);
-                else if (i === 2)
+                else if(attributes[i] === "valence")
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].valence);
             }
             groupByYearArray[j].push(result / 10);
