@@ -32,8 +32,8 @@ setup = function (dataPath) {
 lineGraph = function (data) {
     // set the dimensions and margins of the graph
     var margin = {top: 20, right: 30, bottom: 30, left: 55},
-        width = 460 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
+        width = 1500 - margin.left - margin.right,
+        height = 1000 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
     var svg = d3.select("#SVG_CONTAINER")
