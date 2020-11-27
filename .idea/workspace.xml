@@ -26,10 +26,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="75273c95-06f7-40ed-9710-5148ccf3ec24" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/DataVisualizationPrototypes.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DataVisualizationPrototypes.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Prototype4/Prototype4.html" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype4/Prototype4.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Prototype5/Prototype5.html" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype5/Prototype5.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Prototype6/Prototype6.html" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/Prototype6.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype6/Prototype6.js" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/Prototype6.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +37,12 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
   </component>
   <component name="ProjectId" id="1kDWJTT0sEYlZ0vNa7wJgLMKC0W" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -49,6 +54,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/Prototype4" />
+    <property name="settings.editor.selected.configurable" value="JavaScript.Libraries" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
@@ -82,7 +88,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -96,6 +102,7 @@
       <workItem from="1605235575210" duration="2522000" />
       <workItem from="1605379643515" duration="729000" />
       <workItem from="1605399314136" duration="532000" />
+      <workItem from="1606516759672" duration="2898000" />
     </task>
     <task id="LOCAL-00001" summary="Updated legends and labels">
       <created>1605309690960</created>
@@ -104,11 +111,18 @@
       <option name="project" value="LOCAL" />
       <updated>1605309690961</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Updated descriptions">
+      <created>1605457333733</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1605457333733</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -136,13 +150,14 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updated legends and labels" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated legends and labels" />
+    <MESSAGE value="Updated descriptions" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated descriptions" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="413" y="0" key="CommitChangelistDialog2" timestamp="1605309689817">
+    <state x="413" y="0" key="CommitChangelistDialog2" timestamp="1605457332802">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="413" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1605309689817" />
+    <state x="413" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1605457332802" />
     <state x="240" y="104" width="1192" height="622" key="DiffContextDialog" timestamp="1605239825475">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -151,10 +166,14 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="617" y="170" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1605239797695" />
-    <state x="429" y="148" key="Vcs.Push.Dialog.v2" timestamp="1605378542013">
+    <state x="525" y="65" key="SettingsEditor" timestamp="1606517781453">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="429" y="148" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1605378542013" />
+    <state x="525" y="65" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1606517781453" />
+    <state x="429" y="148" key="Vcs.Push.Dialog.v2" timestamp="1605457341660">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="429" y="148" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1605457341660" />
     <state x="775" y="327" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605456703384">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
