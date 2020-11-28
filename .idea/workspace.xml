@@ -25,13 +25,25 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75273c95-06f7-40ed-9710-5148ccf3ec24" name="Default Changelist" comment="">
+    <list default="true" id="75273c95-06f7-40ed-9710-5148ccf3ec24" name="Default Changelist" comment="Prototype6 - Added tabs">
+      <change afterPath="$PROJECT_DIR$/Prototype6/ScatterPlot.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Prototype6/TabControl.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype6/Prototype6.html" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/Prototype6.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype6/Prototype6.js" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/Prototype6.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype6/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -51,12 +63,13 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Prototype4" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Prototype6" />
     <property name="settings.editor.selected.configurable" value="JavaScript.Libraries" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\GitHub\DataVisualizationPrototypes\Prototype6" />
       <recent name="C:\Users\Alyssa\OneDrive\Documents\GitHub\DataVisualizationPrototypes\Prototype4" />
     </key>
   </component>
@@ -100,7 +113,8 @@
       <workItem from="1605235575210" duration="2522000" />
       <workItem from="1605379643515" duration="729000" />
       <workItem from="1605399314136" duration="532000" />
-      <workItem from="1606516759672" duration="22161000" />
+      <workItem from="1606516759672" duration="25006000" />
+      <workItem from="1606588437327" duration="11582000" />
     </task>
     <task id="LOCAL-00001" summary="Updated legends and labels">
       <created>1605309690960</created>
@@ -144,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606585219627</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Prototype6 - Added curve to line">
+      <created>1606585368862</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1606585368862</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -181,33 +202,42 @@
     <MESSAGE value="Added hover interaction and tooltip" />
     <MESSAGE value="Added hover interaction and tooltip for Stacked Graph" />
     <MESSAGE value="Prototype6 - Fixed y_label" />
-    <option name="LAST_COMMIT_MESSAGE" value="Prototype6 - Fixed y_label" />
+    <MESSAGE value="Prototype6 - Added curve to line" />
+    <option name="LAST_COMMIT_MESSAGE" value="Prototype6 - Added curve to line" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="413" y="0" key="CommitChangelistDialog2" timestamp="1606585218617">
+    <state x="413" y="0" key="CommitChangelistDialog2" timestamp="1606605624452">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="413" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1606585218617" />
+    <state x="413" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1606605624452" />
     <state x="240" y="104" width="1192" height="622" key="DiffContextDialog" timestamp="1605239825475">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="240" y="104" width="1192" height="622" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1605239825475" />
-    <state x="617" y="170" key="FileChooserDialogImpl" timestamp="1605239797695">
+    <state x="617" y="170" key="FileChooserDialogImpl" timestamp="1606604499692">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="617" y="170" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1605239797695" />
+    <state x="617" y="170" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1606604499692" />
     <state x="525" y="65" key="SettingsEditor" timestamp="1606517781453">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="525" y="65" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1606517781453" />
-    <state x="429" y="148" key="Vcs.Push.Dialog.v2" timestamp="1606585223738">
+    <state x="429" y="148" key="Vcs.Push.Dialog.v2" timestamp="1606585370258">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="429" y="148" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1606585223738" />
+    <state x="429" y="148" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1606585370258" />
     <state x="775" y="327" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605456703384">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="775" y="327" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1605456703384" />
+    <state x="918" y="96" width="579" height="534" key="find.popup" timestamp="1606605219000">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="918" y="96" width="579" height="534" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1606605219000" />
+    <state x="501" y="193" key="run.anything.popup" timestamp="1606604479124">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="501" y="193" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1606604479124" />
     <state x="620" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1605378527883">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

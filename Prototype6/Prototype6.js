@@ -25,8 +25,9 @@ setup = function (dataPath) {
     data = d3.csv(dataPath)
         .then(function (data)
         {
-            console.log(data);
             line = new lineGraph(data, SVG);
+            let uniqueYears = Array.from(d3.group(data, d => d.year));
+            fillComboBox(uniqueYears);
         })
 
 };
@@ -42,6 +43,7 @@ lineGraph = function (data, svg) {
     let attributes = data.columns.slice(8, 11);
     let startYear = 1970;
     let endYear = 2020;
+    let uniqueYears = Array.from(d3.group(data, d => d.year));
 
     //** SCALES *****************************************
     // X scale
@@ -52,11 +54,11 @@ lineGraph = function (data, svg) {
 
     // Y scale
     yScale = d3.scaleLinear()
-        .domain([0, 3])
+        .domain([0, 2])
         .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
     //Colour Scale for each attribute
-    let color = d3.scaleOrdinal()
+    let colour = d3.scaleOrdinal()
         .domain(attributes)
         .range(["#4325b4", "#ffa600", "#f70068"]);
 
@@ -122,7 +124,7 @@ lineGraph = function (data, svg) {
             .attr("cx", xLegend)
             .attr("cy", yLegend)
             .attr("r", 6)
-            .style("fill", color(attributes[i]));
+            .style("fill", colour(attributes[i]));
         legend.append("text")
             .attr("x", xLegend + 20)
             .attr("y", yLegend)
@@ -158,14 +160,14 @@ lineGraph = function (data, svg) {
         .keys(keys)
         (groupByYearArray);
 
-    console.log("This is the stack result: ", stackedData);
+    //console.log("This is the stack result: ", stackedData);
 
     // Show the areas
     finishedStack = chart.selectAll("stack")
     .data(stackedData)
     .enter()
     .append("path")
-    .style("fill", function(d) { return color(attributes[d.key-2]); })
+    .style("fill", function(d) { return colour(attributes[d.key-2]); })
     .attr("d", d3.area()
     .x(function(d, i) { return xScale(d.data[0]); })
     .y0(function(d) { return yScale(d[0]); })
@@ -175,7 +177,6 @@ lineGraph = function (data, svg) {
     .attr("class", d => "stack " + attributes[d.key - 2]);
 
     //** INTERACTIONS *****************************************
-
     //Create hover tooltip and vertical line
     const tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
@@ -185,7 +186,7 @@ lineGraph = function (data, svg) {
         .attr("class", "mouse-over-effects");
 
     // create vertical line to follow mouse
-    mouseG.append("path")
+    mouseLine = mouseG.append("path")
         .attr("class", "mouse-line")
         .style("stroke", "#A9A9A9")
         .style("stroke-width", "2")
@@ -201,9 +202,7 @@ lineGraph = function (data, svg) {
             return "mouse-per-line " + attributes[i];
         });
 
-    // for(let i = 0; i < attributeGroupNames.length; i++)
-    // {
-        mousePerLine
+    mousePerLineCircles = mousePerLine
             .append("circle")
             .attr("r", 4)
             .style("stroke", function (d, i)
@@ -213,9 +212,9 @@ lineGraph = function (data, svg) {
             .style("fill", "none")
             .style("stroke-width", "2")
             .style("opacity", "0");
-    //}
 
-    let year;
+    let yearSelected;
+    let indexSelected;
     // append a rect to catch mouse movements on canvas
     mouseG.append('svg:rect')
         .attr('width', width - MARGIN.LEFT - MARGIN.RIGHT - 50)
@@ -228,31 +227,19 @@ lineGraph = function (data, svg) {
     //MOUSE OUT EVENT
     mouseG.on('mouseout', function ()
     {
-        // on mouse out hide line, circles and text
-        d3.select(".mouse-line")
-            .style("opacity", "0");
-        d3.selectAll(".mouse-per-line")
-            .style("opacity", "0");
-        d3.selectAll(".mouse-per-line text")
-            .style("opacity", "0");
-        d3.selectAll(".mouse-per-line circle")
-            .style("opacity", "0");
-
-
+        // on mouse out hide line, circles and tooltip
+        mouseLine.style("opacity", "0");
+        mousePerLine.style("opacity", "0");
+        mousePerLineCircles.style("opacity", "0");
         tooltip.transition().style("opacity", 0);
     })
         //MOUSE OVER EVENT
         .on('mouseover', function ()
         {
-            // on mouse in show line, circles and text
-            d3.select(".mouse-line")
-                .style("opacity", "1");
-            d3.selectAll(".mouse-per-line")
-                .style("opacity", "1");
-            d3.selectAll(".mouse-per-line circle")
-                .style("opacity", "1");
-
-            //Show tooltip
+            // on mouse in show line, circles and tooltip
+            mouseLine.style("opacity", "1");
+            mousePerLine.style("opacity", "1");
+            mousePerLineCircles.style("opacity", "1");
             tooltip.transition().style("opacity", 0.9);
         })
         //MOUSE MOVE EVENT
@@ -262,47 +249,93 @@ lineGraph = function (data, svg) {
             let mouse = d3.pointer(event);
 
             //get year from mouse posX
-            year = xScale.invert(mouse[0]);
-            year = Math.round(year);
-            let index;
+            yearSelected = xScale.invert(mouse[0]);
+            yearSelected = Math.round(yearSelected);
 
             //translate circles
-            d3.selectAll(".mouse-per-line")
+            mousePerLine
                 .attr("transform", function (d, i)
                 {
                     //find index in stacked data of the correct year
                     for(let i = 0; i < d.length; i++)
                     {
-                        if(year == d[i].data[0])
+                        if(yearSelected == d[i].data[0])
                         {
-                            index = i;
+                            indexSelected = i;
                             break;
                         }
                     }
 
                     //Move vertical line to correct position
-                    d3.select(".mouse-line")
-                        .attr("d", function ()
+                    mouseLine.attr("d", function ()
                         {
-                            var data = "M" + xScale(d[index].data[0]) + "," + (height);
-                            data += " " + xScale(d[index].data[0]) + "," + 0;
+                            var data = "M" + xScale(d[indexSelected].data[0]) + "," + (height - MARGIN.TOP );
+                            data += " " + xScale(d[indexSelected].data[0]) + "," + MARGIN.BOTTOM;;
                             return data;
                         });
 
-                    return "translate(" + xScale(d[index].data[0]) + "," + yScale(d[index][1]) + ")";
+                    return "translate(" + xScale(d[indexSelected].data[0]) + "," + yScale(d[indexSelected][1]) + ")";
                 });
 
             //Add tooltip
+            let selection = getSelection(stackedData, indexSelected);
+
             tooltip.style("left", (event.pageX) + "px")
                 .style("top", (event.pageY) + "px")
-                .html("<h2><u>" + year + "</u></h2>");
+                .html("<h2><u>" + yearSelected + "</u></h2>")
+                .selectAll()
+                .data(selection).enter()
+                .append("div")
+                .style("color", d => colour(attributes[d.key]))
+                .style('font-size', 10)
+                .html(d => {
+                    return attributes[d.key] + ": " + d.stackedValue.toFixed(6);
+                });
         })
         //CLICK EVENT
         .on('click', function ( event)
         {
             //TODO: 1. Show scatter plot graph for songs of selected year...
-            console.log(year);
+
+            //Clear previous scatterplot data
+           d3.selectAll(".scatterPlot").remove();
+
+            //Update scatterplot data
+            let selection = getSelection(stackedData, indexSelected);
+            let scatterplot = d3.select("#SVG_CONTAINER_ScatterPlot");
+            scatterPlot(selection[0].data, scatterplot, attributes, uniqueYears);
+
+            //Click to scatterplot tab
+            document.getElementById("scatterTab").click();
+
         });
 
+        //Init scatterplot with 1970 data
+        let selection = getSelection(stackedData, 0);
+        let scatterplot = d3.select("#SVG_CONTAINER_ScatterPlot");
+        scatterPlot(selection[0].data, scatterplot, attributes, uniqueYears);
+
+        // //Open stacked chart by default
+        document.getElementById("stackedTab").click();
+
         //TODO: 2. Show sliders for zoom functionality.
+
+
+
 };
+
+getSelection = function(stackedData, indexSelected)
+{
+    let selection = [];
+    stackedData.map(d => {
+        selection.push(
+            {
+                key: d.index,
+                data: d[indexSelected].data,
+                stackedValue: d[indexSelected][1]
+            })
+    })
+
+    return selection;
+}
+
