@@ -3,7 +3,7 @@ window.onload = function(){
 };
 
 const MARGIN = {
-    "LEFT":50,
+    "LEFT":100,
     "RIGHT":50,
     "TOP":50,
     "BOTTOM":50,
@@ -98,9 +98,9 @@ lineGraph = function (data, svg) {
     chart.append("text")
         .attr("class", "y_label")
         .attr("text-anchor", "end")
-        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height / 2 - MARGIN.TOP) + ")")
-        .attr("x", MARGIN.TOP - 60)
-        .attr("y", height / 2 - MARGIN.LEFT * 2)
+        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2 - MARGIN.TOP)+")")
+        .attr("x", MARGIN.LEFT - 40)
+        .attr("y", height/2 - MARGIN.TOP)
         .text(yLabel);
 
     //** CREATE LEGEND *****************************************
