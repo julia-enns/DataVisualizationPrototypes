@@ -170,6 +170,7 @@ lineGraph = function (data, svg) {
     .x(function(d, i) { return xScale(d.data[0]); })
     .y0(function(d) { return yScale(d[0]); })
     .y1(function(d) { return yScale(d[1]); })
+            .curve(d3.curveMonotoneX)
     )
     .attr("class", d => "stack " + attributes[d.key - 2]);
 
