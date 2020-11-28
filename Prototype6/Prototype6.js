@@ -10,7 +10,7 @@ const MARGIN = {
 };
 
 //dimension of our workspace
-const   width  = 850,
+const   width  = 1200,
     height = 600;
 
 /**
@@ -38,15 +38,17 @@ lineGraph = function (data, svg) {
         .attr("class", "lineGraph")
 
     // List of groups = header of the csv files
+
     let attributes = data.columns.slice(8, 11);
+    let startYear = 1970;
+    let endYear = 2020;
 
     //** SCALES *****************************************
     // X scale
     xScale = d3.scaleLinear()
-        .domain(d3.extent(data, function (d) {
-            return d.year;
-        }))
+        .domain([startYear, endYear])
         .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
+
 
     // Y scale
     yScale = d3.scaleLinear()
@@ -56,7 +58,12 @@ lineGraph = function (data, svg) {
     //Colour Scale for each attribute
     let color = d3.scaleOrdinal()
         .domain(attributes)
-        .range(["green", "blue", "red"]);
+        .range(["#4325b4", "#ffa600", "#f70068"]);
+
+    let circleColour = d3.scaleOrdinal()
+        .domain(attributes)
+                        //blue      yellow      red
+        .range(["#757be6", "#ffc242", "#ff709a"]);
 
     //** CREATE AXIS *****************************************
     let xAxis = d3.axisBottom()
@@ -166,4 +173,135 @@ lineGraph = function (data, svg) {
     )
     .attr("class", d => "stack " + attributes[d.key - 2]);
 
+    //** INTERACTIONS *****************************************
+
+    //Create hover tooltip and vertical line
+    const tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    mouseG = svg.append("g")
+        .attr("class", "mouse-over-effects");
+
+    // create vertical line to follow mouse
+    mouseG.append("path")
+        .attr("class", "mouse-line")
+        .style("stroke", "#A9A9A9")
+        .style("stroke-width", "2")
+        .style("opacity", "0");
+
+    //Create circles to highlight data point on line graph
+    mousePerLine = mouseG.selectAll('.mouse-per-line')
+        .data(stackedData)
+        .enter()
+        .append("g")
+        .attr("class", (d, i) =>
+        {
+            return "mouse-per-line " + attributes[i];
+        });
+
+    // for(let i = 0; i < attributeGroupNames.length; i++)
+    // {
+        mousePerLine
+            .append("circle")
+            .attr("r", 4)
+            .style("stroke", function (d, i)
+            {
+                return circleColour(attributes[i]);
+            })
+            .style("fill", "none")
+            .style("stroke-width", "2")
+            .style("opacity", "0");
+    //}
+
+    let year;
+    // append a rect to catch mouse movements on canvas
+    mouseG.append('svg:rect')
+        .attr('width', width - MARGIN.LEFT - MARGIN.RIGHT - 50)
+        .attr('height', height - MARGIN.TOP)
+        .attr('fill', 'none')
+        .attr('pointer-events', 'all')
+        .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")");
+
+
+    //MOUSE OUT EVENT
+    mouseG.on('mouseout', function ()
+    {
+        // on mouse out hide line, circles and text
+        d3.select(".mouse-line")
+            .style("opacity", "0");
+        d3.selectAll(".mouse-per-line")
+            .style("opacity", "0");
+        d3.selectAll(".mouse-per-line text")
+            .style("opacity", "0");
+        d3.selectAll(".mouse-per-line circle")
+            .style("opacity", "0");
+
+
+        tooltip.transition().style("opacity", 0);
+    })
+        //MOUSE OVER EVENT
+        .on('mouseover', function ()
+        {
+            // on mouse in show line, circles and text
+            d3.select(".mouse-line")
+                .style("opacity", "1");
+            d3.selectAll(".mouse-per-line")
+                .style("opacity", "1");
+            d3.selectAll(".mouse-per-line circle")
+                .style("opacity", "1");
+
+            //Show tooltip
+            tooltip.transition().style("opacity", 0.9);
+        })
+        //MOUSE MOVE EVENT
+        .on('mousemove', function ( event)
+        {
+            //get mouse position
+            let mouse = d3.pointer(event);
+
+            //get year from mouse posX
+            year = xScale.invert(mouse[0]);
+            year = Math.round(year);
+            let index;
+
+            //translate circles
+            d3.selectAll(".mouse-per-line")
+                .attr("transform", function (d, i)
+                {
+                    //find index in stacked data of the correct year
+                    for(let i = 0; i < d.length; i++)
+                    {
+                        if(year == d[i].data[0])
+                        {
+                            index = i;
+                            break;
+                        }
+                    }
+
+                    //Move vertical line to correct position
+                    d3.select(".mouse-line")
+                        .attr("d", function ()
+                        {
+                            var data = "M" + xScale(d[index].data[0]) + "," + (height);
+                            data += " " + xScale(d[index].data[0]) + "," + 0;
+                            return data;
+                        });
+
+                    return "translate(" + xScale(d[index].data[0]) + "," + yScale(d[index][1]) + ")";
+                });
+
+            //Add tooltip
+            tooltip.style("left", (event.pageX) + "px")
+                .style("top", (event.pageY) + "px")
+                .html("<h2><u>" + year + "</u></h2>");
+        })
+        //CLICK EVENT
+        .on('click', function ( event)
+        {
+            //TODO: 1. Show scatter plot graph for songs of selected year...
+            console.log(year);
+        });
+
+        //TODO: 2. Show sliders for zoom functionality.
 };

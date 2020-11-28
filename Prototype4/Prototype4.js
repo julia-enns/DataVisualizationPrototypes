@@ -307,10 +307,10 @@ lineGraph = function (data, svg)
         //CLICK EVENT
         .on('click', function ( event)
         {
-            //TODO: Show scatter plot graph for songs of selected year...
+            //TODO: 1. Show scatter plot graph for songs of selected year...
             console.log(year);
         });
 
-
+        //TODO: 2. Show sliders for zoom functionality.
 
 };
