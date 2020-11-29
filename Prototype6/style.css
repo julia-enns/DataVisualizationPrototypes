@@ -14,10 +14,6 @@ h2
     font-size: 20px;
 }
 
-circle {
-    stroke:#ccc;
-}
-
 div.tooltip {
     position: absolute;
     text-align: left;

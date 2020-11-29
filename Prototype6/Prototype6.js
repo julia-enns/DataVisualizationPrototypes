@@ -73,12 +73,12 @@ lineGraph = function (data, svg) {
     //Colour Scale for each attribute
     let colour = d3.scaleOrdinal()
         .domain(attributes)
-        .range(["#4325b4", "#ffa600", "#f70068"]);
+        .range(["#481e85", "#f8c600", "#e05a00"]);
 
     let circleColour = d3.scaleOrdinal()
         .domain(attributes)
                         //blue      yellow      red
-        .range(["#757be6", "#ffc242", "#ff709a"]);
+        .range(["#0842c2", "#cd66b8", "#ff6d72"]);
 
     //** CREATE AXIS *****************************************
     let xAxis = d3.axisBottom()
@@ -347,7 +347,7 @@ lineGraph = function (data, svg) {
         updateScatterPlot(0);
 
         // Open stacked chart by default
-        document.getElementById("stackedTab").click();
+        document.getElementById("scatterTab").click();
 
         //TODO: 2. Show sliders for zoom functionality.
 
