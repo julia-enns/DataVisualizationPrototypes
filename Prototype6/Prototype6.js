@@ -323,17 +323,7 @@ lineGraph = function (data, svg) {
                     html += d.stackedValue.toFixed(5);
                     html += "</span>";
 
-
-
-
-                    // html += "<p style='text-align:left;'>"
-                    // html += attributes[d.key] + ": ";
-                    // html += "<span style=\"float:right;\">";
-                    // html += d.stackedValue.toFixed(6);
-                    // html += "</span></p>";
-
                     return html;
-                    //return html + attributes[d.key] + ": " + d.stackedValue.toFixed(6);
                 })
         })
         //CLICK EVENT
