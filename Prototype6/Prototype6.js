@@ -57,6 +57,7 @@ lineGraph = function (data, svg) {
         .domain([0, 2])
         .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
+    //TODO: Change colour scheme... Yellow is too hard to see
     //Colour Scale for each attribute
     let colour = d3.scaleOrdinal()
         .domain(attributes)
@@ -282,7 +283,8 @@ lineGraph = function (data, svg) {
 
             tooltip.style("left", (event.pageX + 20) + "px")
                 .style("top", (event.pageY - 20) + "px")
-                .html("<h2><u>" + yearSelected + "</u></h2>")
+                .html("<h2><u>" + yearSelected + "</u></h2>" +
+                    "Click to see the top songs of the year</br></br>")
                 .selectAll()
                 .data(selection).enter()
                 .append("div")
@@ -290,7 +292,7 @@ lineGraph = function (data, svg) {
                 .style('font-size', 10)
                 .html(d => {
                     return attributes[d.key] + ": " + d.stackedValue.toFixed(6);
-                });
+                })
         })
         //CLICK EVENT
         .on('click', function ( event)

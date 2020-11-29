@@ -8,6 +8,11 @@
     width: 1300px;
 }
 
+h2
+{
+    margin-bottom: 1px;
+}
+
 circle {
     stroke:#ccc;
 }
