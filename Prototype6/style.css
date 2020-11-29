@@ -4,14 +4,24 @@
 }
 
 #SVG_CONTAINER_ScatterPlot{
-    height: 700px;
+    height: 1000px;
     width: 1300px;
+}
+
+h1
+{
+    margin: 1px;
 }
 
 h2
 {
-    margin-bottom: 1px;
+    margin: 1px;
     font-size: 20px;
+}
+
+h3
+{
+    margin: 1px;
 }
 
 div.tooltip {

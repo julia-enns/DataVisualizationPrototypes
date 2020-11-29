@@ -78,12 +78,12 @@ lineGraph = function (data, svg) {
     //Colour Scale for each attribute
     let colour = d3.scaleOrdinal()
         .domain(attributes)
-        .range(["#481e85", "#f8c600", "#e05a00"]);
+        .range(["#417ed5", "#2a2b2d", "#d9514e"]);
 
     let circleColour = d3.scaleOrdinal()
         .domain(attributes)
-                        //blue      yellow      red
-        .range(["#0842c2", "#cd66b8", "#ff6d72"]);
+                        //blue      black      red
+        .range(["#508cd5", "#3c3d3f", "#d96160"]);
 
     //** CREATE AXIS *****************************************
     let xAxis = d3.axisBottom()

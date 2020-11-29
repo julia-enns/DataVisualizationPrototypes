@@ -26,6 +26,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="75273c95-06f7-40ed-9710-5148ccf3ec24" name="Default Changelist" comment="Added slider for top songs of the year">
+    <list default="true" id="75273c95-06f7-40ed-9710-5148ccf3ec24" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype6/EventListeners.js" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/EventListeners.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype6/Prototype6.html" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/Prototype6.html" afterDir="false" />
@@ -220,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606673347230</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Second graph">
+      <created>1606685499526</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1606685499527</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -267,6 +275,8 @@
     <MESSAGE value="Prototype6 - Styled tooltip" />
     <MESSAGE value="Added slider for top songs of the year" />
     <option name="LAST_COMMIT_MESSAGE" value="Added slider for top songs of the year" />
+    <MESSAGE value="Second graph" />
+    <option name="LAST_COMMIT_MESSAGE" value="Second graph" />
   </component>
   <component name="WindowStateProjectService">
     <state x="768" y="0" key="CommitChangelistDialog2" timestamp="1606691199957">

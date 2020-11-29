@@ -16,12 +16,17 @@ scatterPlot = function(data)
 
     //Creates group for scatter plot
     let chart = svg.append('g')
-        .attr("class", "scatterPlot")
+        .attr("class", "scatterPlot");
+
+    const tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
 
     //** SCALES *****************************************
     let xScale = d3.scalePoint()
         .domain(attributes)
-        .range([MARGIN.LEFT + 250, width - MARGIN.RIGHT - 250]);
+        .range([MARGIN.LEFT + 75, MARGIN.LEFT + 300]);
 
     let yScale = d3.scaleLinear()
         .domain([0, 1])
@@ -32,27 +37,18 @@ scatterPlot = function(data)
         .domain(attributes)
         .range(["green", "blue", "red"]);
 
-    //Opacity scale for rank
-    let opacity = function(rank)
-    {
-        return (100 - (rank * 9))/100;
-    }
-
-    let radius = function(rank){
-        return (55 - rank*5);
-    }
-
+    //Heat Map Colour Scales
     let valenceHeatMapColours = ["#5a0001","#cb000a", "#e35e5f", "#ffe6e1"]
     let valenceHeatMapScale = d3.scaleLinear()
         .domain([0, 3, 6, 10])
         .range(valenceHeatMapColours);
 
-    let energyHeatMapColours = ["#001635", "#0044a0", "#3c7bc2", "#c6eaff"]
+    let energyHeatMapColours = ["#121315", "#2a2b2d", "#707377", "#caced5"]
     let energyHeatMapScale = d3.scaleLinear()
         .domain([0, 3,6, 10])
         .range(energyHeatMapColours);
 
-    let instrumentalnessHeatMapColours = ["#001635", "#0044a0", "#3c7bc2", "#c6eaff"]
+    let instrumentalnessHeatMapColours = ["#001635", "#0044a0", "#417ed5", "#c6eaff"]
     let instrumentalnessHeatMapScale = d3.scaleLinear()
         .domain([0, 3, 6, 10])
         .range(instrumentalnessHeatMapColours);
@@ -61,7 +57,7 @@ scatterPlot = function(data)
 
     let xAxis = d3.axisBottom()
         .scale(xScale)
-        .tickPadding(10)
+        .tickPadding(20)
         .tickSize(-(height - MARGIN.BOTTOM * 2));
 
     chart.append("g")
@@ -73,7 +69,7 @@ scatterPlot = function(data)
     //Create and draw y axis
     let yAxis = d3.axisLeft()
         .scale(yScale)
-        .tickSize(-1000);
+        .tickSize(-(375));
 
     chart.append("g")
         .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
@@ -94,21 +90,28 @@ scatterPlot = function(data)
 
     //** CREATE LEGEND *****************************************
 
-    let heatMapScale= [instrumentalnessHeatMapScale, energyHeatMapScale,valenceHeatMapScale];
+    let heatMapScale = [instrumentalnessHeatMapScale, energyHeatMapScale,valenceHeatMapScale];
 
-    let xPosLegend = width;
-    let yPosLegend = MARGIN.BOTTOM;
+    let xPosLegend = MARGIN.LEFT + 25;
+    let yPosLegend = height - MARGIN.TOP + 110;
+
+
+    chart.append("text")
+        .attr("x", xPosLegend)
+        .attr("y", yPosLegend - 40)
+        .text("Yearly Rank")
+        .attr("font-size", 20);
 
     for(let i = 0; i < heatMapScale.length; i++)
     {
         //Gradient
         var linearGradient = svg.append("defs")
             .append("linearGradient")
-            .attr("id", "linear-gradient")
-            .attr("x1", "0%")
+            .attr("id", "linear-gradient" + i)
+            .attr("x1", "100%")
             .attr("y1", "0%")
             .attr("x2", "0%")
-            .attr("y2", "100%");
+            .attr("y2", "0%");
         linearGradient.selectAll("stop")
             .data(heatMapScale[i].range())
             .enter().append("stop")
@@ -120,34 +123,33 @@ scatterPlot = function(data)
             });
 
         //Rectangle legend
-        let legendWidth = 50;
-        let legendHeight = 300;
+        let legendWidth = 300;
+        let legendHeight = 50;
 
-        svg.append("text")
-            .attr("x", xPosLegend - 10)
-            .attr("y", yPosLegend - 20)
+        chart.append("text")
+            .attr("x", xPosLegend)
+            .attr("y", yPosLegend - 10)
             .text(attributes[i]);
 
-        svg.append("rect")
+        chart.append("rect")
             .attr("x", xPosLegend)
             .attr("y", yPosLegend)
             .attr("width", legendWidth)
             .attr("height", legendHeight)
-            .style("fill", "url(#linear-gradient)");
+            .style("fill", "url(#linear-gradient" + i + ")");
 
 //Define legend axis scale
         let heatMapAxisScale = d3.scaleLinear()
-            .range([0, legendHeight])
+            .range([0, legendWidth])
             .domain([1, 10]);
-        let heatMapAxis = d3.axisLeft().ticks(10).scale(heatMapAxisScale);
-        svg.append("g")
-            .attr("transform", "translate(" + xPosLegend + "," + yPosLegend + ")")
+        let heatMapAxis = d3.axisBottom().ticks(10).scale(heatMapAxisScale);
+        chart.append("g")
+            .attr("transform", "translate(" + xPosLegend + "," + (yPosLegend + legendHeight) + ")")
             .call(heatMapAxis);
 
-        xPosLegend += 100;
+        yPosLegend += 100;
     }
 
-    //TODO: CREATE VISUALIZATION TO REPLACE THIS ONE
     //** DATA POINTS *****************************************
     //Create point for each attribute
 
@@ -170,7 +172,48 @@ scatterPlot = function(data)
                 return yScale(yValue(d));})
             .attr("r", 15)
             .style("fill", (d => heatMapScale[i](d.songyear_pos)))
-            // .style("opacity", (d => (100 - (d.songyear_pos * 9))/100));     //popularity represented by opacity
-            .style("opacity", 0.8);     //popularity represented by opacity
+            .style("opacity", 0.8)//popularity represented by opacity
+            .on("mouseover", function(event, d) {
+
+                for(let j = 0; j < attributes.length; j++) {
+                    let points = document.getElementsByClassName("dot-" + attributes[j]);
+
+                    d3.selectAll(points)
+                        .filter(function (f) {
+                          return f.songyear_pos !== d.songyear_pos;
+                        })
+                        .style("opacity", 0.1);
+
+                    d3.selectAll(points)
+                        .filter(function (f) {
+                            return f.songyear_pos === d.songyear_pos;
+                        })
+                        .attr("r", 20)
+                        .style("fill", (d => heatMapScale[j](3)));
+                }
+
+                tooltip.transition().style("opacity", 0.8);
+                tooltip.style("left", (500) + "px")
+                    .style("top", (250) + "px")
+                    .style("width", 250 + "px")
+                    .html("<h1>" + d.name + "</h1><h2>by "
+                        + d.artist + "</h2><br/><h3>Rank: " + d.songyear_pos+
+                        "</h3><h3>Score: "+d.score + "</h3><br/><div style='clear:both'><h3><span style='color:" + heatMapScale[0](3) + ";float:left;'>Instrumentalness: </span><span style='float:right;'>" + d.instrumentalness
+                        + "</span></h3></div><div style='clear:both'><h3><span style='color:" + heatMapScale[1](3) + ";float:left;'>Energy: </span><span style='float:right;'>"+ d.energy
+                        + "</span></h3></div><div style='clear:both'><h3><span style='color:" + heatMapScale[2](3) + ";float:left;'>Valence: </span><span style='float:right;'>" + d.valence + "</span></h3></div>");
+            })
+            .on("mouseout", function(d) {
+
+                for(let j = 0; j < attributes.length; j++) {
+                    let points = document.getElementsByClassName("dot-" + attributes[j]);
+
+                    d3.selectAll(points)
+                        .attr("r", 15)
+                        .style("opacity", 0.8)
+                        .style("fill", (d => heatMapScale[j](d.songyear_pos)));
+                }
+
+                tooltip.transition().style("opacity", 0);
+            });
     }
 };
