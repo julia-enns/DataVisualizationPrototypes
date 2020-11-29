@@ -105,9 +105,8 @@ lineGraph = function (data, svg) {
     chart.append("text")
         .attr("class", "x_label")
         .attr("text-anchor", "end")
-        .attr("x", width / 2)
-        .attr("y", height + 30)
-        .attr("font-size", "15px")
+        .attr("x", width/2 + 50)
+        .attr("y", height-MARGIN.BOTTOM + 50)
         .text(xLabel);
 
     chart.append("text")
@@ -240,16 +239,16 @@ lineGraph = function (data, svg) {
         .attr('pointer-events', 'all')
         .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")");
 
-
-    //MOUSE OUT EVENT
-    mouseG.on('mouseout', function ()
-    {
-        // on mouse out hide line, circles and tooltip
-        hoverLine.style("opacity", "0");
-        mousePerLine.style("opacity", "0");
-        mousePerLineCircles.style("opacity", "0");
-        tooltip.transition().style("opacity", 0);
-    })
+    mouseG
+        //MOUSE OUT EVENT
+        .on('mouseout', function ()
+        {
+            // on mouse out hide line, circles and tooltip
+            hoverLine.style("opacity", "0");
+            mousePerLine.style("opacity", "0");
+            mousePerLineCircles.style("opacity", "0");
+            tooltip.transition().style("opacity", 0);
+        })
         //MOUSE OVER EVENT
         .on('mouseover', function ()
         {
@@ -306,22 +305,41 @@ lineGraph = function (data, svg) {
             tooltip.style("left", (event.pageX + 20) + "px")
                 .style("top", (event.pageY - 20) + "px")
                 .html("<h2><u>" + yearSelected + "</u></h2>" +
-                    "Click to see the top songs of the year</br></br>")
+                    "Click for top songs of the year </br></br>")
                 .selectAll()
                 .data(selection).enter()
                 .append("div")
                 .style("color", d => colour(attributes[d.key]))
-                .style('font-size', 10)
+                .style('font-size', "14px")
+                .style("clear", "both")
                 .html(d =>
                 {
-                    return attributes[d.key] + ": " + d.stackedValue.toFixed(6);
+                    var html = "<span class=\"dot\" " +
+                                "style=\"background-color:" + colour(attributes[d.key]) +
+                                ";float:left;\">"
+                                + "</span>";
+                    html += "<span style='float:left;'>" + attributes[d.key] + ": " + "</span>"
+                    html += "<span style=\"float:right;margin-left:10px\">";
+                    html += d.stackedValue.toFixed(5);
+                    html += "</span>";
+
+
+
+
+                    // html += "<p style='text-align:left;'>"
+                    // html += attributes[d.key] + ": ";
+                    // html += "<span style=\"float:right;\">";
+                    // html += d.stackedValue.toFixed(6);
+                    // html += "</span></p>";
+
+                    return html;
+                    //return html + attributes[d.key] + ": " + d.stackedValue.toFixed(6);
                 })
         })
         //CLICK EVENT
+        //Shows Top Songs of the Year graph
         .on('click', function ( event)
         {
-            //TODO: 1. Show scatter plot graph for songs of selected year...
-
             //Clear previous scatterplot data
            d3.selectAll(".scatterPlot").remove();
 
@@ -333,7 +351,6 @@ lineGraph = function (data, svg) {
 
             //Click to scatterplot tab
             document.getElementById("scatterTab").click();
-
         });
 
         //Init scatterplot with 1970 data

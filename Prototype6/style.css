@@ -11,6 +11,7 @@
 h2
 {
     margin-bottom: 1px;
+    font-size: 20px;
 }
 
 circle {
@@ -30,11 +31,14 @@ div.tooltip {
     pointer-events: none;
 }
 
-p
-{
-    font-size: 160%;
-    width:1500px;
-    margin:20px 100px;
+.dot {
+    height: 10px;
+    width: 10px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 3px;
 }
 
 /* Style the tab */
