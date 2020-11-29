@@ -23,8 +23,16 @@ function openChart(evt, graphName) {
         document.getElementById("chartTitle").innerHTML = "Songs over the Decades";
     if(graphName == "Scatter")
         document.getElementById("chartTitle").innerHTML = "Top Songs of the Year";
+}
+
+comboboxListener_updateScatterPlot = function(selectObject)
+{
+    //console.log(selectObject.value);
+    //clear
+    d3.selectAll(".scatterPlot").remove();
 
 
-
-
+    //TODO: if a year in combobox is selected, update graph.
+    let selection = getSelection(selectObject.selectedIndex)[0].data
+    scatterPlot(selection);
 }

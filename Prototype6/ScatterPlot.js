@@ -153,31 +153,3 @@ scatterPlot = function(data)
             .style("opacity", (d => opacity(d.songyear_pos)));     //popularity represented by opacity
     }
 };
-
-
-fillComboBox = function(options)
-{
-    let select = document.getElementById("selectYear");
-
-    for(var i = 0; i < options.length; i++)
-    {
-        var option = options[i];
-        var element = document.createElement("option");
-        element.textContent = option[0];
-        element.id = "option_" + option[0];
-        element.value = option[0];
-        select.appendChild(element);
-    }
-}
-
-comboboxListener_updateScatterPlot = function(selectObject)
-{
-    //console.log(selectObject.value);
-    //clear
-    d3.selectAll(".scatterPlot").remove();
-
-
-    //TODO: if a year in combobox is selected, update graph.
-    let selection = getSelection(selectObject.selectedIndex)[0].data
-    scatterPlot(selection);
-}
