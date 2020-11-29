@@ -14,22 +14,25 @@
 
 <!--Tabs-->
 <div class="tab">
-    <button class="tablinks" onclick="openChart(event, 'Stacked')" id="stackedTab">Stacked</button>
-    <button class="tablinks" onclick="openChart(event, 'Scatter')" id="scatterTab">Scatter</button>
+    <button class="tablinks" onclick="openChart(event, 'Stacked')" id="stackedTab">Songs over the Decades</button>
+    <button class="tablinks" onclick="openChart(event, 'Scatter')" id="scatterTab">Top Songs of the Year</button>
 </div>
+
+<h1 id="chartTitle"></h1>
 
 <!-- Tab Content -->
 <div id="MAIN" class="relative">
-
     <div id="Stacked" class="tabcontent">
        <svg id="SVG_CONTAINER"></svg>
     </div>
 
     <div id="Scatter" class="tabcontent">
-        <label>Select a Year:</label>
-        <select id="selectYear"
-                onchange="comboboxListener_updateScatterPlot(this);">
-        </select>
+        <div id="SelectYear_ComboBox">
+            <label>Select a Year:</label>
+            <select id="selectYear"
+                    onchange="comboboxListener_updateScatterPlot(this);">
+            </select>
+        </div>
             <svg id="SVG_CONTAINER_ScatterPlot"></svg>
     </div>
 </div>

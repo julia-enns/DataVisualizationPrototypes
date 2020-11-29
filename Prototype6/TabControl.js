@@ -17,4 +17,14 @@ function openChart(evt, graphName) {
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(graphName).style.display = "block";
     evt.currentTarget.className += " active";
+
+    //Change title
+    if(graphName == "Stacked")
+        document.getElementById("chartTitle").innerHTML = "Songs over the Decades";
+    if(graphName == "Scatter")
+        document.getElementById("chartTitle").innerHTML = "Top Songs of the Year";
+
+
+
+
 }
