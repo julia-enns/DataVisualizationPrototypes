@@ -40,10 +40,10 @@ lineGraph = function (data, svg) {
 
     // List of groups = header of the csv files
 
-    let attributes = data.columns.slice(8, 11);
+    attributes = data.columns.slice(8, 11);
     let startYear = 1970;
     let endYear = 2020;
-    let uniqueYears = Array.from(d3.group(data, d => d.year));
+    uniqueYears = Array.from(d3.group(data, d => d.year));
 
     //** SCALES *****************************************
     // X scale
@@ -156,7 +156,7 @@ lineGraph = function (data, svg) {
     var keys = [2, 3, 4];
 
     //stack the data?
-    var stackedData = d3.stack()
+    stackedData = d3.stack()
         .keys(keys)
         (groupByYearArray);
 
@@ -278,10 +278,10 @@ lineGraph = function (data, svg) {
                 });
 
             //Add tooltip
-            let selection = getSelection(stackedData, indexSelected);
+            let selection = getSelection(indexSelected);
 
-            tooltip.style("left", (event.pageX) + "px")
-                .style("top", (event.pageY) + "px")
+            tooltip.style("left", (event.pageX + 20) + "px")
+                .style("top", (event.pageY - 20) + "px")
                 .html("<h2><u>" + yearSelected + "</u></h2>")
                 .selectAll()
                 .data(selection).enter()
@@ -301,9 +301,11 @@ lineGraph = function (data, svg) {
            d3.selectAll(".scatterPlot").remove();
 
             //Update scatterplot data
-            let selection = getSelection(stackedData, indexSelected);
-            let scatterplot = d3.select("#SVG_CONTAINER_ScatterPlot");
-            scatterPlot(selection[0].data, scatterplot, attributes, uniqueYears);
+            let selection = getSelection(indexSelected);
+            scatterPlot(selection[0].data);
+
+            //Update combobox to select correct year
+            document.getElementById("option_" + yearSelected).selected = true;
 
             //Click to scatterplot tab
             document.getElementById("scatterTab").click();
@@ -311,7 +313,7 @@ lineGraph = function (data, svg) {
         });
 
         //Init scatterplot with 1970 data
-        let selection = getSelection(stackedData, 0);
+        let selection = getSelection(0);
         let scatterplot = d3.select("#SVG_CONTAINER_ScatterPlot");
         scatterPlot(selection[0].data, scatterplot, attributes, uniqueYears);
 
@@ -324,7 +326,7 @@ lineGraph = function (data, svg) {
 
 };
 
-getSelection = function(stackedData, indexSelected)
+getSelection = function(indexSelected)
 {
     let selection = [];
     stackedData.map(d => {

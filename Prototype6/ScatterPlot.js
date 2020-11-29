@@ -4,8 +4,10 @@
  * @param svg
  */
 
-scatterPlot = function(data, svg, attributeGroupNames, uniqueYears)
+scatterPlot = function(data)
 {
+    let svg = d3.select("#SVG_CONTAINER_ScatterPlot");
+
     console.log(data);
 
     //** SETUP *****************************************
@@ -27,7 +29,7 @@ scatterPlot = function(data, svg, attributeGroupNames, uniqueYears)
 
     //Colour Scale for each attribute
     let colourScale = d3.scaleOrdinal()
-        .domain(attributeGroupNames)
+        .domain(attributes)
         .range(["green", "blue", "red"]);
 
     //Opacity scale for rank
@@ -82,19 +84,19 @@ scatterPlot = function(data, svg, attributeGroupNames, uniqueYears)
         .attr("y", yLegend - 30)
         .attr("font-weight", "bold")
         .text("Attributes")
-    for(let i = 0; i < attributeGroupNames.length; i++)
+    for(let i = 0; i < attributes.length; i++)
     {
         chart.append("circle")
             .attr("cx", xLegend)
             .attr("cy", yLegend)
             .attr("r", 6)
-            .style("fill", colourScale(attributeGroupNames[i]));
+            .style("fill", colourScale(attributes[i]));
         chart.append("text")
             .attr("x", xLegend + 20)
             .attr("y", yLegend)
             .attr("r", 6)
             .style("font-size", "15px")
-            .text(attributeGroupNames[i]);
+            .text(attributes[i]);
 
         yLegend += 30;
     }
@@ -126,9 +128,9 @@ scatterPlot = function(data, svg, attributeGroupNames, uniqueYears)
     //TODO: CREATE VISUALIZATION TO REPLACE THIS ONE
     //** DATA POINTS *****************************************
     //Create point for each attribute
-    for(let i = 0; i < attributeGroupNames.length; i++)
+    for(let i = 0; i < attributes.length; i++)
     {
-        let y = attributeGroupNames[i];
+        let y = attributes[i];
         let yValue = function(d) {return d[y]};        //get attribute value for row
 
         data.forEach(function (d) {
@@ -140,13 +142,13 @@ scatterPlot = function(data, svg, attributeGroupNames, uniqueYears)
             .data(data)
             .enter()
             .append("circle")
-            .attr("class", "dot-" + attributeGroupNames[i])
+            .attr("class", "dot-" + attributes[i])
             .attr("cx", (d) => {
                 return xScaleScatterPlot(d.year);
             })
             .attr("cy", (d) => yScaleScatterPlot(yValue(d)))
             .attr("r", 6)
-            .style("fill", colourScale(attributeGroupNames[i]))
+            .style("fill", colourScale(attributes[i]))
             // .style("opacity", (d => (100 - (d.songyear_pos * 9))/100));     //popularity represented by opacity
             .style("opacity", (d => opacity(d.songyear_pos)));     //popularity represented by opacity
     }
@@ -162,14 +164,20 @@ fillComboBox = function(options)
         var option = options[i];
         var element = document.createElement("option");
         element.textContent = option[0];
+        element.id = "option_" + option[0];
         element.value = option[0];
         select.appendChild(element);
     }
 }
 
-updateScatterPlot = function(year)
+updateScatterPlot = function(selectObject)
 {
-    //TODO: if a year in combobox is selected, update graph.
-    //TODO: if the stacked click event is triggered, update the combobox to the selected year
+    //console.log(selectObject.value);
+    //clear
+    d3.selectAll(".scatterPlot").remove();
 
+
+    //TODO: if a year in combobox is selected, update graph.
+    let selection = getSelection(selectObject.selectedIndex)[0].data
+    scatterPlot(selection);
 }

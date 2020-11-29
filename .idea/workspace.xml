@@ -25,13 +25,11 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75273c95-06f7-40ed-9710-5148ccf3ec24" name="Default Changelist" comment="Prototype6 - Added tabs">
-      <change afterPath="$PROJECT_DIR$/Prototype6/ScatterPlot.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Prototype6/TabControl.js" afterDir="false" />
+    <list default="true" id="75273c95-06f7-40ed-9710-5148ccf3ec24" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype6/Prototype6.html" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/Prototype6.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Prototype6/Prototype6.js" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/Prototype6.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Prototype6/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prototype6/ScatterPlot.js" beforeDir="false" afterPath="$PROJECT_DIR$/Prototype6/ScatterPlot.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +112,7 @@
       <workItem from="1605379643515" duration="729000" />
       <workItem from="1605399314136" duration="532000" />
       <workItem from="1606516759672" duration="25006000" />
-      <workItem from="1606588437327" duration="11582000" />
+      <workItem from="1606588437327" duration="14339000" />
     </task>
     <task id="LOCAL-00001" summary="Updated legends and labels">
       <created>1605309690960</created>
@@ -165,7 +163,14 @@
       <option name="project" value="LOCAL" />
       <updated>1606585368862</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Prototype6 - Added tabs and placeholder chart">
+      <created>1606606269827</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1606606269827</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -203,13 +208,14 @@
     <MESSAGE value="Added hover interaction and tooltip for Stacked Graph" />
     <MESSAGE value="Prototype6 - Fixed y_label" />
     <MESSAGE value="Prototype6 - Added curve to line" />
-    <option name="LAST_COMMIT_MESSAGE" value="Prototype6 - Added curve to line" />
+    <MESSAGE value="Prototype6 - Added tabs and placeholder chart" />
+    <option name="LAST_COMMIT_MESSAGE" value="Prototype6 - Added tabs and placeholder chart" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="413" y="0" key="CommitChangelistDialog2" timestamp="1606605624452">
+    <state x="413" y="0" key="CommitChangelistDialog2" timestamp="1606606268677">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="413" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1606605624452" />
+    <state x="413" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1606606268677" />
     <state x="240" y="104" width="1192" height="622" key="DiffContextDialog" timestamp="1605239825475">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -222,10 +228,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="525" y="65" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1606517781453" />
-    <state x="429" y="148" key="Vcs.Push.Dialog.v2" timestamp="1606585370258">
+    <state x="429" y="148" key="Vcs.Push.Dialog.v2" timestamp="1606606271724">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="429" y="148" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1606585370258" />
+    <state x="429" y="148" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1606606271724" />
     <state x="775" y="327" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1605456703384">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

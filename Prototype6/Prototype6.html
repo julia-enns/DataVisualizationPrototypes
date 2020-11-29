@@ -27,8 +27,8 @@
 
     <div id="Scatter" class="tabcontent">
         <label>Select a Year:</label>
-        <select id="selectYear" onchange="if (this.selectedIndex) selectYearData();">
-            <option>Choose a Year</option>
+        <select id="selectYear"
+                onchange="updateScatterPlot(this);">
         </select>
             <svg id="SVG_CONTAINER_ScatterPlot"></svg>
     </div>
