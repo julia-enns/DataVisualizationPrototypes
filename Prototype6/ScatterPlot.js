@@ -15,15 +15,15 @@ scatterPlot = function(data)
     let endYear = 2020;
 
     //Creates group for scatter plot
-    chart = svg.append('g')
+    let chart = svg.append('g')
         .attr("class", "scatterPlot")
 
     //** SCALES *****************************************
-    xScaleScatterPlot = d3.scaleLinear()
+    let xScale = d3.scaleLinear()
         .domain([startYear, endYear])
         .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
 
-    yScaleScatterPlot = d3.scaleLinear()
+    let yScale = d3.scaleLinear()
         .domain([0, 1])
         .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
@@ -41,7 +41,7 @@ scatterPlot = function(data)
     //** CREATE AXIS *****************************************
     //Create and draw x axis
     let xAxis = d3.axisBottom()
-        .scale(xScaleScatterPlot)
+        .scale(xScale)
         .ticks(uniqueYears.length/5)
         .tickFormat(d3.format("d"));
 
@@ -50,7 +50,7 @@ scatterPlot = function(data)
         .call(xAxis);
 
     //Create and draw y axis
-    let yAxis = d3.axisLeft().scale(yScaleScatterPlot);
+    let yAxis = d3.axisLeft().scale(yScale);
     chart.append("g")
         .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
         .call(yAxis);
@@ -75,8 +75,8 @@ scatterPlot = function(data)
         .text(yLabel);
 
     //** CREATE LEGEND *****************************************
-    xLegend = width;
-    yLegend = MARGIN.BOTTOM;
+    let xLegend = width;
+    let yLegend = MARGIN.BOTTOM;
 
     //Colour encoding
     chart.append("text")
@@ -144,9 +144,9 @@ scatterPlot = function(data)
             .append("circle")
             .attr("class", "dot-" + attributes[i])
             .attr("cx", (d) => {
-                return xScaleScatterPlot(d.year);
+                return xScale(d.year);
             })
-            .attr("cy", (d) => yScaleScatterPlot(yValue(d)))
+            .attr("cy", (d) => yScale(yValue(d)))
             .attr("r", 6)
             .style("fill", colourScale(attributes[i]))
             // .style("opacity", (d => (100 - (d.songyear_pos * 9))/100));     //popularity represented by opacity
@@ -157,7 +157,7 @@ scatterPlot = function(data)
 
 fillComboBox = function(options)
 {
-    var select = document.getElementById("selectYear");
+    let select = document.getElementById("selectYear");
 
     for(var i = 0; i < options.length; i++)
     {
@@ -170,7 +170,7 @@ fillComboBox = function(options)
     }
 }
 
-updateScatterPlot = function(selectObject)
+comboboxListener_updateScatterPlot = function(selectObject)
 {
     //console.log(selectObject.value);
     //clear

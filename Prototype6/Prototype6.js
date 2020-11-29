@@ -35,7 +35,7 @@ setup = function (dataPath) {
 lineGraph = function (data, svg) {
 
     // append the svg object to the body of the page
-    chart = svg.append('g')
+    let chart = svg.append('g')
         .attr("class", "lineGraph")
 
     // List of groups = header of the csv files
@@ -47,13 +47,13 @@ lineGraph = function (data, svg) {
 
     //** SCALES *****************************************
     // X scale
-    xScale = d3.scaleLinear()
+    let xScale = d3.scaleLinear()
         .domain([startYear, endYear])
         .range([MARGIN.LEFT, width - MARGIN.RIGHT]);
 
 
     // Y scale
-    yScale = d3.scaleLinear()
+    let yScale = d3.scaleLinear()
         .domain([0, 2])
         .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
 
@@ -109,7 +109,7 @@ lineGraph = function (data, svg) {
     let xLegend = width;
     let yLegend = MARGIN.TOP;
 
-    legend = svg.append("g").attr("class", "legend");
+    let legend = svg.append("g").attr("class", "legend");
 
     //Colour encoding legend
     legend.append("text")
@@ -163,7 +163,7 @@ lineGraph = function (data, svg) {
     //console.log("This is the stack result: ", stackedData);
 
     // Show the areas
-    finishedStack = chart.selectAll("stack")
+    let finishedStack = chart.selectAll("stack")
     .data(stackedData)
     .enter()
     .append("path")
@@ -182,18 +182,18 @@ lineGraph = function (data, svg) {
         .attr("class", "tooltip")
         .style("opacity", 0);
 
-    mouseG = svg.append("g")
+    let mouseG = svg.append("g")
         .attr("class", "mouse-over-effects");
 
     // create vertical line to follow mouse
-    mouseLine = mouseG.append("path")
+    let mouseLine = mouseG.append("path")
         .attr("class", "mouse-line")
         .style("stroke", "#A9A9A9")
         .style("stroke-width", "2")
         .style("opacity", "0");
 
     //Create circles to highlight data point on line graph
-    mousePerLine = mouseG.selectAll('.mouse-per-line')
+    let mousePerLine = mouseG.selectAll('.mouse-per-line')
         .data(stackedData)
         .enter()
         .append("g")
@@ -202,7 +202,7 @@ lineGraph = function (data, svg) {
             return "mouse-per-line " + attributes[i];
         });
 
-    mousePerLineCircles = mousePerLine
+    let mousePerLineCircles = mousePerLine
             .append("circle")
             .attr("r", 4)
             .style("stroke", function (d, i)
