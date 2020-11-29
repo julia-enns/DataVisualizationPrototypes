@@ -25,14 +25,27 @@ function openChart(evt, graphName) {
         document.getElementById("chartTitle").innerHTML = "Top Songs of the Year";
 }
 
-comboboxListener_updateScatterPlot = function(selectObject)
+updateSliderYearDisplay = function(year)
 {
-    //console.log(selectObject.value);
-    //clear
+    let yearDisplay = document.getElementById("slider_yearDisplay");
+    yearDisplay.innerHTML = year;
+
+    document.getElementById("chartTitle").innerHTML = "Top Songs of the Year: " + year;
+}
+
+updateSlider = function(indexSelected, year)
+{
+    let slider = document.getElementById("yearSlider");
+    slider.value = indexSelected;
+    updateSliderYearDisplay(year);
+}
+
+sliderListener_updateScatterPlot = function(selectObject)
+{
     d3.selectAll(".scatterPlot").remove();
 
-
-    //TODO: if a year in combobox is selected, update graph.
-    let selection = getSelection(selectObject.selectedIndex)[0].data
+    let selection = getSelection(selectObject.value)[0].data;
+    updateSliderYearDisplay(selection[0]);
     scatterPlot(selection);
+
 }

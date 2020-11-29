@@ -27,11 +27,13 @@
     </div>
 
     <div id="Scatter" class="tabcontent">
-        <div id="SelectYear_ComboBox">
-            <label>Select a Year:</label>
-            <select id="selectYear"
-                    onchange="comboboxListener_updateScatterPlot(this);">
-            </select>
+        <div class="slidecontainer">
+            <input type="range" min="0" value="0" class="slider" id="yearSlider"
+                   list = "yearListTicks"
+                   onchange="sliderListener_updateScatterPlot(this)"
+                    oninput="sliderListener_updateScatterPlot(this)">
+            <datalist id="yearListTicks"></datalist>
+            <p>Year: <span id="slider_yearDisplay"></span></p>
         </div>
             <svg id="SVG_CONTAINER_ScatterPlot"></svg>
     </div>

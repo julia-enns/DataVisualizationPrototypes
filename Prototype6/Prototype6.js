@@ -33,17 +33,22 @@ setup = function (dataPath) {
 
 fillComboBox = function(options)
 {
-    let select = document.getElementById("selectYear");
-
+    let select = document.getElementById("yearListTicks")
     for(var i = 0; i < options.length; i++)
     {
-        var option = options[i];
-        var element = document.createElement("option");
-        element.textContent = option[0];
-        element.id = "option_" + option[0];
-        element.value = option[0];
-        select.appendChild(element);
+        {
+            if(i % 3 == 0)
+            {
+                var option = options[i];
+                var element = document.createElement("option");
+                element.textContent = option[0];
+                select.appendChild(element);
+            }
+        }
     }
+
+    select = document.getElementById("yearSlider");
+    select.max = uniqueYears.length - 1;
 }
 
 lineGraph = function (data, svg) {
@@ -333,14 +338,11 @@ lineGraph = function (data, svg) {
             //Clear previous scatterplot data
            d3.selectAll(".scatterPlot").remove();
 
-            //Update scatterplot data
-            updateScatterPlot(indexSelected);
-
-            //Update combobox to select correct year
-            document.getElementById("option_" + yearSelected).selected = true;
-
             //Click to scatterplot tab
             document.getElementById("scatterTab").click();
+
+            //Update scatterplot data
+            updateScatterPlot(indexSelected);
         });
 
         //Init scatterplot with 1970 data
@@ -357,6 +359,7 @@ updateScatterPlot = function(indexSelected)
 {
     let selection = getSelection(indexSelected);
     scatterPlot(selection[0].data);
+    updateSlider(indexSelected, selection[0].data[0]);
 }
 
 getSelection = function(indexSelected)

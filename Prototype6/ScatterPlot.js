@@ -164,7 +164,6 @@ scatterPlot = function(data)
             .append("circle")
             .attr("class", "dot-" + attributes[i])
             .attr("cx", () => {
-                console.log("i " + i);
                 return xScale(attributes[i]);
             })
             .attr("cy", (d) => {
