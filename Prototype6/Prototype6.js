@@ -11,7 +11,7 @@ const MARGIN = {
 
 //dimension of our workspace
 const   width  = 1200,
-    height = 600;
+    height = 500;
 
 /**
  * This function loads the data and calls other necessary functions to create our visualization

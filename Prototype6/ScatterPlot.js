@@ -8,8 +8,6 @@ scatterPlot = function(data)
 {
     let svg = d3.select("#SVG_CONTAINER_ScatterPlot");
 
-    console.log(data);
-
     //** SETUP *****************************************
     //Creates group for scatter plot
     let chart = svg.append('g')
@@ -90,62 +88,90 @@ scatterPlot = function(data)
 
     let heatMapScale = [instrumentalnessHeatMapScale, energyHeatMapScale,valenceHeatMapScale];
 
-    let xPosLegend = MARGIN.LEFT + 25;
+    let xPosLegend = 80;
     let yPosLegend = height - MARGIN.TOP + 110;
 
+    //Rectangle legend
+    let legendWidth = 500;
+    let legendHeight = 20;
+    let squarewidth = legendWidth/10;
 
     chart.append("text")
-        .attr("x", xPosLegend)
+        .attr("x", 0)
         .attr("y", yPosLegend - 40)
         .text("Yearly Rank")
         .attr("font-size", 20);
 
     for(let i = 0; i < heatMapScale.length; i++)
     {
-        //Gradient
-        var linearGradient = svg.append("defs")
-            .append("linearGradient")
-            .attr("id", "linear-gradient" + i)
-            .attr("x1", "100%")
-            .attr("y1", "0%")
-            .attr("x2", "0%")
-            .attr("y2", "0%");
-        linearGradient.selectAll("stop")
-            .data(heatMapScale[i].range())
-            .enter().append("stop")
-            .attr("offset", function (d, i) {
-                return i / (valenceHeatMapScale.range().length - 1);
-            })
-            .attr("stop-color", function (d) {
-                return d;
-            });
-
-        //Rectangle legend
-        let legendWidth = 300;
-        let legendHeight = 50;
 
         chart.append("text")
-            .attr("x", xPosLegend)
-            .attr("y", yPosLegend - 10)
+            .attr("font-size", "11px")
+            .attr("x", 0)
+            .attr("y", yPosLegend + 15)
             .text(attributes[i]);
 
-        chart.append("rect")
-            .attr("x", xPosLegend)
+        let rank = [];
+        for(let j = 1; j <=10; j++) rank.push(j);
+
+        chart.selectAll("rank_rect")
+            .data(rank).enter()
+            .append("rect")
+            .attr("class", d => "rank_rect " + d)
+            .attr("x", (d, j) =>
+            {
+                let posX = xPosLegend + (j * (squarewidth + 0.5));
+                return posX;
+            })
             .attr("y", yPosLegend)
-            .attr("width", legendWidth)
+            .attr("width", squarewidth)
             .attr("height", legendHeight)
-            .style("fill", "url(#linear-gradient" + i + ")");
+            .style("fill", (d) => heatMapScale[i](d) )
+            .on("mouseover", function(event, d)
+            {
+                let rankRects = document.getElementsByClassName("rank_rect " + d);
 
-//Define legend axis scale
-        let heatMapAxisScale = d3.scaleLinear()
-            .range([0, legendWidth])
-            .domain([1, 10]);
-        let heatMapAxis = d3.axisBottom().ticks(10).scale(heatMapAxisScale);
-        chart.append("g")
-            .attr("transform", "translate(" + xPosLegend + "," + (yPosLegend + legendHeight) + ")")
-            .call(heatMapAxis);
+                d3.selectAll(rankRects)
+                    .style("stroke-width", 2)
+                    .style("stroke", "black");
 
-        yPosLegend += 100;
+                let rankCircle = document.getElementsByClassName("dot-" + attributes[0] + " " + d)[0];
+                const mouseoverEvent = new Event('mouseover');
+                rankCircle.dispatchEvent(mouseoverEvent);
+
+            })
+            .on("mouseout", function(event, d)
+            {
+                let rankRects = document.getElementsByClassName("rank_rect");
+                d3.selectAll(rankRects)
+                    .style("stroke-width", 0)
+
+                let rankCircle = document.getElementsByClassName("dot-" + attributes[0] + " " + d)[0];
+                const mouseoverEvent = new Event('mouseout');
+                rankCircle.dispatchEvent(mouseoverEvent);
+            });
+
+        if(i == 0)
+        {
+            let heatMapAxisScale = d3.scaleLinear()
+                .range([0, legendWidth - squarewidth])
+                .domain([1, 10]);
+            let heatMapAxis = d3.axisTop()
+                .ticks(10)
+                .tickSize(0)
+                .scale(heatMapAxisScale);
+
+            let heatMapAxisGroup =
+                chart.append("g")
+                .style("font-size", "14px")
+                .attr("transform", "translate(" + (xPosLegend + squarewidth/2) + "," + (yPosLegend) + ")")
+                .call(heatMapAxis);
+            heatMapAxisGroup
+                .select(".domain")
+                .attr("stroke-width", 0);
+        }
+
+        yPosLegend += legendHeight;
     }
 
     //** DATA POINTS *****************************************
@@ -162,7 +188,7 @@ scatterPlot = function(data)
             .data(data[1])
             .enter()
             .append("circle")
-            .attr("class", "dot-" + attributes[i])
+            .attr("class", d => "dot-" + attributes[i] +" " + d.songyear_pos)
             .attr("cx", () => {
                 return xScale(attributes[i]);
             })
