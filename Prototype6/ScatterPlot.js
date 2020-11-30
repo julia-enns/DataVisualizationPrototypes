@@ -180,7 +180,6 @@ scatterPlot = function(data)
                         .filter(function (f) {
                           return f.songyear_pos !== d.songyear_pos;
                         })
-                        .transition()
                         .style("opacity", 0.1);
 
                     d3.selectAll(points)
@@ -209,7 +208,8 @@ scatterPlot = function(data)
 
                     d3.selectAll(points)
                         .transition()
-                        .attr("r", 15)
+                        .attr("r", 15);
+                    d3.selectAll(points)
                         .style("opacity", 0.8)
                         .style("fill", (d => heatMapScale[j](d.songyear_pos)));
                 }
