@@ -22,15 +22,23 @@ function openChart(evt, graphName) {
     if(graphName == "Stacked")
         document.getElementById("chartTitle").innerHTML = "Songs over the Decades";
     if(graphName == "Scatter")
-        document.getElementById("chartTitle").innerHTML = "Top Songs of the Year";
+        updateTitleYear();
+}
+
+updateTitleYear = function()
+{
+    let slider = document.getElementById("yearSlider");
+    let index = slider.value;
+    let year = getYearSelection(index)[0].data[0];
+    console.log(year);
+    document.getElementById("chartTitle").innerHTML = "Top Songs of the Year: " + year;
 }
 
 updateSliderYearDisplay = function(year)
 {
     let yearDisplay = document.getElementById("slider_yearDisplay");
     yearDisplay.innerHTML = year;
-
-    document.getElementById("chartTitle").innerHTML = "Top Songs of the Year: " + year;
+    updateTitleYear();
 }
 
 updateSlider = function(indexSelected, year)
@@ -44,7 +52,7 @@ sliderListener_updateScatterPlot = function(selectObject)
 {
     d3.selectAll(".scatterPlot").remove();
 
-    let selection = getSelection(selectObject.value)[0].data;
+    let selection = getYearSelection(selectObject.value)[0].data;
     updateSliderYearDisplay(selection[0]);
     scatterPlot(selection);
 

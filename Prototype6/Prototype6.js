@@ -83,7 +83,7 @@ lineGraph = function (data, svg) {
     let circleColour = d3.scaleOrdinal()
         .domain(attributes)
                         //blue      black      red
-        .range(["#508cd5", "#3c3d3f", "#d96160"]);
+        .range(["#83b3ec", "#575d69", "#ffa7a7"]);
 
     //** CREATE AXIS *****************************************
     let xAxis = d3.axisBottom()
@@ -140,7 +140,7 @@ lineGraph = function (data, svg) {
         legend.append("circle")
             .attr("cx", xLegend)
             .attr("cy", yLegend)
-            .attr("r", 6)
+            .attr("r", 8)
             .style("fill", colour(attributes[i]));
         legend.append("text")
             .attr("x", xLegend + 20)
@@ -225,13 +225,13 @@ lineGraph = function (data, svg) {
     //Create a circle per each line to highlight data point on line graph
     let mousePerLineCircles =
         mousePerLine.append("circle")
-            .attr("r", 4)
+            .attr("r", 6)
             .style("stroke", function (d, i)
             {
                 return circleColour(attributes[i]);
             })
             .style("fill", "none")
-            .style("stroke-width", "2")
+            .style("stroke-width", "4")
             .style("opacity", "0");
 
     let yearSelected;
@@ -299,7 +299,7 @@ lineGraph = function (data, svg) {
                 });
 
             //Get selection
-            let selection = getSelection(indexSelected);
+            let selection = getYearSelection(indexSelected);
 
             //Sort so that attributes are in the stacked order
             var a = selection[0];
@@ -357,12 +357,12 @@ lineGraph = function (data, svg) {
 
 updateScatterPlot = function(indexSelected)
 {
-    let selection = getSelection(indexSelected);
+    let selection = getYearSelection(indexSelected);
     scatterPlot(selection[0].data);
     updateSlider(indexSelected, selection[0].data[0]);
 }
 
-getSelection = function(indexSelected)
+getYearSelection = function(indexSelected)
 {
     let selection = [];
     stackedData.map(d => {
