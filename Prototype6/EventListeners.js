@@ -34,26 +34,15 @@ updateTitleYear = function()
     document.getElementById("chartTitle").innerHTML = "Top Songs of the Year: " + year;
 }
 
-updateSliderYearDisplay = function(year)
-{
-    let yearDisplay = document.getElementById("slider_yearDisplay");
-    yearDisplay.innerHTML = year;
-    updateTitleYear();
-}
-
-updateSlider = function(indexSelected, year)
+updateSlider = function(indexSelected)
 {
     let slider = document.getElementById("yearSlider");
     slider.value = indexSelected;
-    updateSliderYearDisplay(year);
+    updateTitleYear();
 }
 
 sliderListener_updateScatterPlot = function(selectObject)
 {
-    d3.selectAll(".scatterPlot").remove();
-
-    let selection = getYearSelection(selectObject.value)[0].data;
-    updateSliderYearDisplay(selection[0]);
-    scatterPlot(selection);
-
+    updateScatterTab(selectObject.value);
 }
+

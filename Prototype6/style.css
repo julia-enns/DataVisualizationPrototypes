@@ -5,12 +5,22 @@
 
 #SVG_CONTAINER_ScatterPlot{
     height: 1000px;
-    width: 1300px;
+    width: 700px;
+}
+
+#SVG_CONTAINER_ParallelLines{
+    height: 1000px;
+    width: 700px;
 }
 
 h1
 {
     margin: 1px;
+}
+
+#chartTitle
+{
+    margin:10px;
 }
 
 h2

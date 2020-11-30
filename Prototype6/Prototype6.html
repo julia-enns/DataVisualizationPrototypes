@@ -6,6 +6,7 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script type = "text/javascript" src="Prototype6.js"></script>
     <script type = "text/javascript" src="ScatterPlot.js"></script>
+    <script type = "text/javascript" src="ParallelLine.js"></script>
     <script type = "text/javascript" src="EventListeners.js"></script>
 
 </head>
@@ -28,14 +29,15 @@
 
     <div id="Scatter" class="tabcontent">
         <div class="slidecontainer">
+            <h3 style="margin:5px;">Select a year:</h3>
             <input type="range" min="0" value="0" class="slider" id="yearSlider"
                    list = "yearListTicks"
                    onchange="sliderListener_updateScatterPlot(this)"
                     oninput="sliderListener_updateScatterPlot(this)">
             <datalist id="yearListTicks"></datalist>
-            <p>Year: <span id="slider_yearDisplay"></span></p>
         </div>
             <svg id="SVG_CONTAINER_ScatterPlot"></svg>
+            <svg id="SVG_CONTAINER_ParallelLines"></svg>
     </div>
 </div>
 

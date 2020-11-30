@@ -11,9 +11,6 @@ scatterPlot = function(data)
     console.log(data);
 
     //** SETUP *****************************************
-    let startYear = 1970;
-    let endYear = 2020;
-
     //Creates group for scatter plot
     let chart = svg.append('g')
         .attr("class", "scatterPlot");
@@ -21,6 +18,7 @@ scatterPlot = function(data)
     const tooltip = d3.select("body")
         .append("div")
         .attr("class", "tooltip")
+        .attr("id", "scatter_tooltip")
         .style("opacity", 0);
 
     //** SCALES *****************************************

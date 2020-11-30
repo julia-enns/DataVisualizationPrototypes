@@ -335,18 +335,15 @@ lineGraph = function (data, svg) {
         //Shows Top Songs of the Year graph
         .on('click', function ( event)
         {
-            //Clear previous scatterplot data
-           d3.selectAll(".scatterPlot").remove();
-
             //Click to scatterplot tab
             document.getElementById("scatterTab").click();
 
             //Update scatterplot data
-            updateScatterPlot(indexSelected);
+            updateScatterTab(indexSelected);
         });
 
         //Init scatterplot with 1970 data
-        updateScatterPlot(0);
+        updateScatterTab(0);
 
         // Open stacked chart by default
         document.getElementById("scatterTab").click();
@@ -355,11 +352,16 @@ lineGraph = function (data, svg) {
 
 };
 
-updateScatterPlot = function(indexSelected)
+updateScatterTab = function(indexSelected)
 {
+    //Clear previous scatterplot data
+    d3.selectAll(".scatterPlot").remove();
+    d3.selectAll("#scatter_tooltip").remove();
+
     let selection = getYearSelection(indexSelected);
     scatterPlot(selection[0].data);
-    updateSlider(indexSelected, selection[0].data[0]);
+    parallelLines(selection[0].data);
+    updateSlider(indexSelected);
 }
 
 getYearSelection = function(indexSelected)
