@@ -1,21 +1,10 @@
-parallelLinesSetup = function(data) {
-    //** SETUP *****************************************
-
-    let ranks = [];
-    let originalData = d3.csv("data.csv")
-        .then(function (d) {
-            ranks = d.columns.slice(5, 8);
-            parallelLines(data, ranks);
-        });
-};
-
-parallelLines = function(data, ranks) {
+parallelLines = function(data) {
 
     let svg = d3.select("#SVG_CONTAINER_ParallelLines");
     let chart = svg.append('g')
         .attr("class", "parallelLines");
 
-    ranks = [ranks[1], ranks[2], ranks[0]];
+    let ranks = [rank[1], rank[2], rank[0]];
 
     //** SCALES *****************************************
 

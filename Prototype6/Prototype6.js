@@ -25,6 +25,7 @@ setup = function (dataPath) {
     data = d3.csv(dataPath)
         .then(function (data)
         {
+            rank = data.columns.slice(5, 8);
             line = new lineGraph(data, SVG);
             let uniqueYears = Array.from(d3.group(data, d => d.year));
             fillComboBox(uniqueYears);
@@ -356,14 +357,14 @@ updateScatterTab = function(indexSelected)
 {
     //Clear previous scatterplot data
     d3.selectAll(".parallelLines").remove();
-    d3.selectAll(".rank-line").remove();
-    d3.selectAll(".rank-circle").remove();
+    // d3.selectAll(".rank-line").remove();
+    // d3.selectAll(".rank-circle").remove();
     d3.selectAll(".scatterPlot").remove();
     d3.selectAll("#scatter_tooltip").remove();
 
     let selection = getYearSelection(indexSelected);
     scatterPlot(selection[0].data);
-    parallelLinesSetup(selection[0].data);
+    parallelLines(selection[0].data);
     updateSlider(indexSelected);
 }
 
@@ -403,12 +404,17 @@ mouseover_scatter = function(event, d)
             .style("fill", (d => heatMapScale[j](3)));
     }
     scatterTooltip.transition().style("opacity", 0.8);
-    scatterTooltip.style("left", (500) + "px")
+    scatterTooltip.style("left", (558) + "px")
         .style("top", (250) + "px")
         .style("width", 250 + "px")
         .html("<h1>" + d.name + "</h1><h2>by "
-            + d.artist + "</h2><br/><h3>Rank: " + d.songyear_pos+
-            "</h3><h3>Score: "+d.score + "</h3><br/><div style='clear:both'><h3><span style='color:" + heatMapScale[0](3) + ";float:left;'>Instrumentalness: </span><span style='float:right;'>" + d.instrumentalness
+            + d.artist + "</h2><br/>" +
+            "<h3>Score: "+d.score + "</h3><br/>" +
+            "<h3>Year Rank: " + d.songyear_pos + "</h3>" +
+            "<h3>Decade Rank: " + d.songdecade_pos + "</h3>" +
+            "<h3>Overall Rank: " + d.songentry_pos + "</h3>" +
+            "<br/>" +
+            "<div style='clear:both'><h3><span style='color:" + heatMapScale[0](3) + ";float:left;'>Instrumentalness: </span><span style='float:right;'>" + d.instrumentalness
             + "</span></h3></div><div style='clear:both'><h3><span style='color:" + heatMapScale[1](3) + ";float:left;'>Energy: </span><span style='float:right;'>"+ d.energy
             + "</span></h3></div><div style='clear:both'><h3><span style='color:" + heatMapScale[2](3) + ";float:left;'>Valence: </span><span style='float:right;'>" + d.valence + "</span></h3></div>");
 
