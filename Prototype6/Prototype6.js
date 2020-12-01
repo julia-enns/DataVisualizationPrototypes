@@ -355,9 +355,11 @@ lineGraph = function (data, svg) {
 updateScatterTab = function(indexSelected)
 {
     //Clear previous scatterplot data
+    d3.selectAll(".parallelLines").remove();
+    d3.selectAll(".rank-line").remove();
+    d3.selectAll(".rank-circle").remove();
     d3.selectAll(".scatterPlot").remove();
     d3.selectAll("#scatter_tooltip").remove();
-    d3.selectAll(".parallelLines").remove();
 
     let selection = getYearSelection(indexSelected);
     scatterPlot(selection[0].data);
@@ -434,8 +436,6 @@ mouseover_parallelLine = function(event, d)
     let lines = document.getElementsByClassName("rank-line");
     let dots = document.getElementsByClassName("rank-circle");
 
-    console.log("help");
-
     d3.selectAll(lines)
         .filter(function (f) {
             return f.songyear_pos !== d.songyear_pos;
@@ -454,11 +454,8 @@ mouseout_parallelLine = function(event, d)
     let lines = document.getElementsByClassName("rank-line");
     let dots = document.getElementsByClassName("rank-circle");
 
-    console.log("help2");
-
-
     d3.selectAll(lines)
-        .style("opacity", 0.5);
+        .style("opacity", 0.7);
     d3.selectAll(dots)
-        .style("opacity", 0.5);
+        .style("opacity", 0.7);
 }

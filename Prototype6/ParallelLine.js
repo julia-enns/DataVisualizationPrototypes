@@ -105,7 +105,7 @@ parallelLines = function(data, ranks) {
         .style("fill", "none")
         .style("stroke", color)
         .style("stroke-width", 5)
-        .style("opacity", 0.5)
+        .style("opacity", 0.7)
         .on("mouseover", function(event, d)
         {
             mouseover_parallelLine(event, d);
@@ -135,7 +135,7 @@ parallelLines = function(data, ranks) {
             })
             .attr("r", 8)
             .style("fill", color)
-            .style("opacity", 0.5)
+            .style("opacity", 0.7)
             .on("mouseover", function(event, d)
             {
                 mouseover_parallelLine(event, d);
