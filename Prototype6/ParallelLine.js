@@ -15,20 +15,19 @@ parallelLines = function(data, ranks) {
     let chart = svg.append('g')
         .attr("class", "parallelLines");
 
-    console.log(ranks);
-
     ranks = [ranks[1], ranks[2], ranks[0]];
 
     //** SCALES *****************************************
 
     let xScale = d3.scalePoint()
         .domain(ranks)
-        .range([MARGIN.LEFT + 75, MARGIN.LEFT + 300]);
+        .range([MARGIN.LEFT + 75, MARGIN.LEFT + 500]);
 
     let yScale = {};
     let max = 10;
     for(let i in ranks){
         let name = ranks[i];
+
         yScale[name] = d3.scaleLinear()
             .domain( [max,1] )
             .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
@@ -55,7 +54,6 @@ parallelLines = function(data, ranks) {
     let offset = 75;
     for(let i in ranks){
         let name = ranks[i];
-
         yAxis[name] = d3.axisLeft()
             .scale(yScale[name]);
 
@@ -64,24 +62,66 @@ parallelLines = function(data, ranks) {
             .attr("transform", "translate("+ (MARGIN.LEFT+offset) + "," + 0 +")")
             .call(yAxis[name]);
 
-        offset += 112.5;
+        offset += 212.5;
     }
 
     //** CREATE LINES ****************************************
 
     function path(d) {
-        return d3.line()(ranks.map(function(p) {
+        return d3.line()(ranks.map(function(p,i) {
 
-            console.log("dp" + d[p] + " " + p);
-            return [xScale(p), yScale[p](d[p])]; }));
+            if(d[p] === ""){
+                if(d[ranks[1]] === "" && d[ranks[2]] === ""){
+                    return [xScale(ranks[0]),yScale[ranks[0]](d[ranks[0]])];
+                }
+                else
+                    return [xScale(ranks[i - 1]), yScale[ranks[i - 1]](d[ranks[i - 1]])];
+            }else {
+                return [xScale(p), yScale[p](d[p])];
+            }
+        }));
     }
+
+    function color(d) {
+        if (d[ranks[1]] === "") {
+            if (d[ranks[2]] === "") {
+                return "#ea8a00";
+            } else {
+                return "#008aa8";
+            }
+        } else if (d[ranks[2]] === "") {
+            return "#099a02";
+        } else {
+            return "#cb6aab";
+        }
+    }
+
 
     chart.append('g').selectAll("myPath")
         .data(data[1])
         .enter().append("path")
         .attr("d",  path)
         .style("fill", "none")
-        .style("stroke", "#a0509b")
-        .style("stroke-width", 3)
+        .style("stroke", color)
+        .style("stroke-width", 5)
         .style("opacity", 0.5);
+
+    for(let i = 0; i < ranks.length; i++) {
+
+        chart.append('g').selectAll("points")
+            .data(data[1])
+            .enter().append("circle")
+            .filter(function(d){
+                return d[ranks[i]] !== "";
+            })
+            .attr("cx", function (d) {
+                return xScale(ranks[i]);
+            })
+            .attr("cy", function (d) {
+                return yScale[ranks[i]](d[ranks[i]]);
+            })
+            .attr("r", 8)
+            .style("fill", color)
+            .style("opacity", 0.5);
+    }
 };
