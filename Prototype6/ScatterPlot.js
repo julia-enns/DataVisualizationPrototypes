@@ -13,7 +13,7 @@ scatterPlot = function(data)
     let chart = svg.append('g')
         .attr("class", "scatterPlot");
 
-    const tooltip = d3.select("body")
+    scatterTooltip = d3.select("body")
         .append("div")
         .attr("class", "tooltip")
         .attr("id", "scatter_tooltip")
@@ -86,7 +86,7 @@ scatterPlot = function(data)
 
     //** CREATE LEGEND *****************************************
 
-    let heatMapScale = [instrumentalnessHeatMapScale, energyHeatMapScale,valenceHeatMapScale];
+    heatMapScale = [instrumentalnessHeatMapScale, energyHeatMapScale,valenceHeatMapScale];
 
     let xPosLegend = 80;
     let yPosLegend = height - MARGIN.TOP + 110;
@@ -138,7 +138,6 @@ scatterPlot = function(data)
                 let rankCircle = document.getElementsByClassName("dot-" + attributes[0] + " " + d)[0];
                 const mouseoverEvent = new Event('mouseover');
                 rankCircle.dispatchEvent(mouseoverEvent);
-
             })
             .on("mouseout", function(event, d)
             {
@@ -197,50 +196,16 @@ scatterPlot = function(data)
             .attr("r", 15)
             .style("fill", (d => heatMapScale[i](d.songyear_pos)))
             .style("opacity", 0.8)//popularity represented by opacity
-            .on("mouseover", function(event, d) {
+            .on("mouseover", function(event, d)
+            {
+                mouseover_parallelLine(event, d);
+                mouseover_scatter(event, d);
 
-                for(let j = 0; j < attributes.length; j++) {
-                    let points = document.getElementsByClassName("dot-" + attributes[j]);
-
-                    d3.selectAll(points)
-                        .filter(function (f) {
-                          return f.songyear_pos !== d.songyear_pos;
-                        })
-                        .style("opacity", 0.1);
-
-                    d3.selectAll(points)
-                        .filter(function (f) {
-                            return f.songyear_pos === d.songyear_pos;
-                        })
-                        .transition()
-                        .attr("r", 20)
-                        .style("fill", (d => heatMapScale[j](3)));
-                }
-
-                tooltip.transition().style("opacity", 0.8);
-                tooltip.style("left", (500) + "px")
-                    .style("top", (250) + "px")
-                    .style("width", 250 + "px")
-                    .html("<h1>" + d.name + "</h1><h2>by "
-                        + d.artist + "</h2><br/><h3>Rank: " + d.songyear_pos+
-                        "</h3><h3>Score: "+d.score + "</h3><br/><div style='clear:both'><h3><span style='color:" + heatMapScale[0](3) + ";float:left;'>Instrumentalness: </span><span style='float:right;'>" + d.instrumentalness
-                        + "</span></h3></div><div style='clear:both'><h3><span style='color:" + heatMapScale[1](3) + ";float:left;'>Energy: </span><span style='float:right;'>"+ d.energy
-                        + "</span></h3></div><div style='clear:both'><h3><span style='color:" + heatMapScale[2](3) + ";float:left;'>Valence: </span><span style='float:right;'>" + d.valence + "</span></h3></div>");
             })
-            .on("mouseout", function(d) {
-
-                for(let j = 0; j < attributes.length; j++) {
-                    let points = document.getElementsByClassName("dot-" + attributes[j]);
-
-                    d3.selectAll(points)
-                        .transition()
-                        .attr("r", 15);
-                    d3.selectAll(points)
-                        .style("opacity", 0.8)
-                        .style("fill", (d => heatMapScale[j](d.songyear_pos)));
-                }
-
-                tooltip.transition().style("opacity", 0);
+            .on("mouseout", function(event, d)
+            {
+                mouseout_scatter(event, d)
+                mouseout_parallelLine(event, d);
             });
     }
 };

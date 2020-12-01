@@ -96,21 +96,34 @@ parallelLines = function(data, ranks) {
         }
     }
 
-
     chart.append('g').selectAll("myPath")
         .data(data[1])
-        .enter().append("path")
+        .enter()
+        .append("path")
+        .attr("class", d => "rank-line " + " " + d.songyear_pos + d.name)
         .attr("d",  path)
         .style("fill", "none")
         .style("stroke", color)
         .style("stroke-width", 5)
-        .style("opacity", 0.5);
+        .style("opacity", 0.5)
+        .on("mouseover", function(event, d)
+        {
+            mouseover_parallelLine(event, d);
+            mouseover_scatter(event, d)
+        })
+        .on("mouseout", function(event, d)
+        {
+            mouseout_parallelLine(event, d);
+            mouseout_scatter(event, d)
+        })
 
-    for(let i = 0; i < ranks.length; i++) {
+
+        for(let i = 0; i < ranks.length; i++) {
 
         chart.append('g').selectAll("points")
             .data(data[1])
             .enter().append("circle")
+            .attr("class", d => "rank-circle " + d.name)
             .filter(function(d){
                 return d[ranks[i]] !== "";
             })
@@ -122,6 +135,17 @@ parallelLines = function(data, ranks) {
             })
             .attr("r", 8)
             .style("fill", color)
-            .style("opacity", 0.5);
-    }
+            .style("opacity", 0.5)
+            .on("mouseover", function(event, d)
+            {
+                mouseover_parallelLine(event, d);
+                mouseover_scatter(event, d);
+            })
+            .on("mouseout", function(event, d)
+            {
+                mouseout_parallelLine(event, d);
+                mouseout_scatter(event, d);
+            })
+
+        }
 };

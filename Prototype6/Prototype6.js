@@ -379,3 +379,86 @@ getYearSelection = function(indexSelected)
 
     return selection;
 }
+
+mouseover_scatter = function(event, d)
+{
+    for(let j = 0; j < attributes.length; j++)
+    {
+        let points = document.getElementsByClassName("dot-" + attributes[j]);
+
+        d3.selectAll(points)
+            .filter(function (f) {
+                return f.songyear_pos !== d.songyear_pos;
+            })
+            .style("opacity", 0.1);
+
+        d3.selectAll(points)
+            .filter(function (f) {
+                return f.songyear_pos === d.songyear_pos;
+            })
+            .transition()
+            .attr("r", 20)
+            .style("fill", (d => heatMapScale[j](3)));
+    }
+    scatterTooltip.transition().style("opacity", 0.8);
+    scatterTooltip.style("left", (500) + "px")
+        .style("top", (250) + "px")
+        .style("width", 250 + "px")
+        .html("<h1>" + d.name + "</h1><h2>by "
+            + d.artist + "</h2><br/><h3>Rank: " + d.songyear_pos+
+            "</h3><h3>Score: "+d.score + "</h3><br/><div style='clear:both'><h3><span style='color:" + heatMapScale[0](3) + ";float:left;'>Instrumentalness: </span><span style='float:right;'>" + d.instrumentalness
+            + "</span></h3></div><div style='clear:both'><h3><span style='color:" + heatMapScale[1](3) + ";float:left;'>Energy: </span><span style='float:right;'>"+ d.energy
+            + "</span></h3></div><div style='clear:both'><h3><span style='color:" + heatMapScale[2](3) + ";float:left;'>Valence: </span><span style='float:right;'>" + d.valence + "</span></h3></div>");
+
+}
+
+mouseout_scatter = function(event, d)
+{
+    for(let j = 0; j < attributes.length; j++) {
+        let points = document.getElementsByClassName("dot-" + attributes[j]);
+
+        d3.selectAll(points)
+            .transition()
+            .attr("r", 15);
+        d3.selectAll(points)
+            .style("opacity", 0.8)
+            .style("fill", (d => heatMapScale[j](d.songyear_pos)));
+    }
+
+    scatterTooltip.transition().style("opacity", 0);
+}
+
+
+mouseover_parallelLine = function(event, d)
+{
+    let lines = document.getElementsByClassName("rank-line");
+    let dots = document.getElementsByClassName("rank-circle");
+
+    console.log("help");
+
+    d3.selectAll(lines)
+        .filter(function (f) {
+            return f.songyear_pos !== d.songyear_pos;
+        })
+        .style("opacity", 0.1);
+
+    d3.selectAll(dots)
+        .filter(function (f) {
+            return f.songyear_pos !== d.songyear_pos;
+        })
+        .style("opacity", 0.1);
+}
+
+mouseout_parallelLine = function(event, d)
+{
+    let lines = document.getElementsByClassName("rank-line");
+    let dots = document.getElementsByClassName("rank-circle");
+
+    console.log("help2");
+
+
+    d3.selectAll(lines)
+        .style("opacity", 0.5);
+    d3.selectAll(dots)
+        .style("opacity", 0.5);
+}
