@@ -3,6 +3,10 @@
     width: 1300px;
 }
 
+* {
+    font-family: sans-serif;
+}
+
 #SVG_CONTAINER_ScatterPlot{
     height: 1000px;
     width: 700px;

@@ -31,7 +31,7 @@ updateTitleYear = function()
     let index = slider.value;
     let year = getYearSelection(index)[0].data[0];
     console.log(year);
-    document.getElementById("chartTitle").innerHTML = "Top Songs of the Year: " + year;
+    document.getElementById("chartTitle").innerHTML = "Top 10 Songs of the Year: " + year;
 }
 
 updateSlider = function(indexSelected)

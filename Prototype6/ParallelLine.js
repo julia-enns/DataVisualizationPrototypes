@@ -26,10 +26,12 @@ parallelLines = function(data) {
 
     //** CREATE AXIS ****************************************
 
+    let rankNames = [ "Year Rank", "Decade Rank", "Overall Rank"];
     //x axis
     let xAxis = d3.axisBottom()
         .scale(xScale)
-        .tickPadding(20);
+        .tickPadding(20)
+        .tickFormat( (d, i) => rankNames[i]);
 
     chart.append("g")
         .attr("transform", "translate(0," + (height - MARGIN.BOTTOM) + ")")

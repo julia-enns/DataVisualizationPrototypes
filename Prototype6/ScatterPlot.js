@@ -88,7 +88,7 @@ scatterPlot = function(data)
 
     heatMapScale = [instrumentalnessHeatMapScale, energyHeatMapScale,valenceHeatMapScale];
 
-    let xPosLegend = 80;
+    let xPosLegend = 100;
     let yPosLegend = height - MARGIN.TOP + 110;
 
     //Rectangle legend
