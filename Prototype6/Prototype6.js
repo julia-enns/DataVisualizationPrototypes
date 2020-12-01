@@ -357,10 +357,11 @@ updateScatterTab = function(indexSelected)
     //Clear previous scatterplot data
     d3.selectAll(".scatterPlot").remove();
     d3.selectAll("#scatter_tooltip").remove();
+    d3.selectAll(".parallelLines").remove();
 
     let selection = getYearSelection(indexSelected);
     scatterPlot(selection[0].data);
-    parallelLines(selection[0].data);
+    parallelLinesSetup(selection[0].data);
     updateSlider(indexSelected);
 }
 
