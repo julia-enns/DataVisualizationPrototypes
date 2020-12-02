@@ -81,17 +81,17 @@ lineGraph = function (data, svg) {
 
     let yScaleRanks = {};
     let max = 100;
+    let offset = 0;
     for(let i in ranks){
         let name = ranks[i];
 
         yScaleRanks[name] = d3.scaleLinear()
             .domain( [max,1] )
-            .range([height/2 - MARGIN.TOP * 6, MARGIN.TOP]);
+            .range([height/2 - MARGIN.TOP * 6 + offset, MARGIN.TOP + offset]);
 
         max *= 10;
+        offset = (height/2 - MARGIN.TOP * 5) - (MARGIN.TOP);
     }
-
-    console.log(yScaleRanks);
 
     //TODO: Change colour scheme... Yellow is too hard to see
     //Colour Scale for each attribute
@@ -111,7 +111,6 @@ lineGraph = function (data, svg) {
         .tickFormat(d3.format("d"))
 
     let yAxisRanks = {};
-    let offset = 0;
     for(let i in ranks)
     {
         let name = ranks[i];
@@ -120,10 +119,8 @@ lineGraph = function (data, svg) {
 
         chart.append("g")
             .attr("class", "yearAxis")
-            .attr("transform", "translate("+ (MARGIN.LEFT) + "," + 0 + offset +")")
+            .attr("transform", "translate("+ (MARGIN.LEFT) + "," + 0 +")")
             .call(yAxisRanks[name]);
-
-        offset += (height/2 - MARGIN.TOP * 5) - (MARGIN.TOP);
     }
 
     let yAxis = d3.axisLeft().scale(yScale);
@@ -208,36 +205,82 @@ lineGraph = function (data, svg) {
         }
     }
 
+    console.log(groupByYearArray);
+
     for(let i = 0; i < ranks.length; i ++)
     {
         for (let j = 0; j < groupByYearArray.length; j++)
         {
             let result = 0;
+            let total = 0;
             for (let k = 0; k < 10; k++)
             {
-                if(ranks[i] === "songdecade_pos")
+                if(ranks[i] === "songdecade_pos" && groupByYearArray[j][1][k].songdecade_pos !== "") {
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].songdecade_pos);
-                else if(attributes[i] === "songentry_pos")
+                    total++;
+                }
+                else if(ranks[i] === "songentry_pos" && groupByYearArray[j][1][k].songentry_pos !== "") {
                     result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].songentry_pos);
+                    total++;
+                }
             }
-            groupByYearArray[j].push(result / 10);
+
+            if(result === 0) {
+                groupByYearArray[j].push(max);
+            }
+            else
+                groupByYearArray[j].push(result / total);
         }
     }
 
-    console.log(groupByYearArray);
+    rankColor = function(d){
+        if(d === "songdecade_pos")
+            return "#d97511";
+        else
+            return "#3e8945";
+    }
 
     //Create soundwaves
+    max = 100;
     for(let i = 0; i < ranks.length; i++)
     {
+       /* soundwave = chart.selectAll("bars")
+            .data(groupByYearArray)
+            .enter()
+            .append("rect")
+            .attr("x", d => {
+                return xScale(d[0]) - 5;
+            })
+            .attr("y",  d => {
+                return yScaleRanks[ranks[i]](0);
+            })
+            .attr("width", 10)
+            .attr("height", d => {
+                if(d[(5+i)] === 0)
+                    return 0;
+
+                console.log(d[0] + " " + ranks[i]  + " " + (max - d[(5+i)]));
+                return yScaleRanks[ranks[i]](max - d[(5+i)])/2;})
+            .attr("fill", "black");*/
+
         soundwave = chart.selectAll("bars")
             .data(groupByYearArray)
             .enter()
             .append("rect")
-            .attr("x", d =>
-            {
-                return xScale(d[0]);
+            .attr("x", d => {
+                return xScale(d[0]) - 5;
             })
-            //.attr("y", d => yScaleRanks[i](d.))
+            .attr("y",  d => {
+                return yScaleRanks[ranks[i]](0) - yScaleRanks[ranks[i]](max - d[(5+i)])/2;
+            })
+            .attr("width", 10)
+            .attr("height", d => {
+                if(d[(5+i)] === 0)
+                    return 0;
+                return (yScaleRanks[ranks[i]](max - d[(5+i)])/2);})
+            .attr("fill", rankColor(ranks[i]));
+
+        max = 991;
     }
 
     var keys = [2, 3, 4];
