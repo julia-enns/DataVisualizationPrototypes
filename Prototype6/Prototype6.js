@@ -63,7 +63,6 @@ lineGraph = function (data, svg) {
     attributes = data.columns.slice(8, 11);
     uniqueYears = Array.from(d3.group(data, d => d.year));
     let ranks = [rank[2], rank[0]];
-    console.log(ranks);
 
     let startYear = 1970;
     let endYear = 2020;
@@ -228,7 +227,6 @@ lineGraph = function (data, svg) {
         }
     }
 
-    console.log(groupByYearArray);
 
     max = 100;
     for(let i = 0; i < ranks.length; i ++)
@@ -270,10 +268,13 @@ lineGraph = function (data, svg) {
     offset = 144;
     for(let i = 0; i < ranks.length; i++)
     {
-        soundwave = chart.selectAll("bars")
+        soundwave = chart.append("g")
+            .attr("class", "soundwave")
+            .selectAll("bars")
             .data(groupByYearArray)
             .enter()
             .append("rect")
+            .attr("class", d => "soundwave-bar " + d[0])
             .attr("x", d => {
                 return xScale(d[0]) - 5;
             })
@@ -372,6 +373,7 @@ lineGraph = function (data, svg) {
             mousePerLine.style("opacity", "0");
             mousePerLineCircles.style("opacity", "0");
             tooltip.transition().style("opacity", 0);
+            mouseout_soundwave();
         })
         //MOUSE OVER EVENT
         .on('mouseover', function ()
@@ -406,6 +408,8 @@ lineGraph = function (data, svg) {
                         }
                     }
 
+                    mousemove_soundwave(event, d[indexSelected].data);
+
                     //Translate vertical line
                     hoverLine.attr("d", function ()
                         {
@@ -429,16 +433,47 @@ lineGraph = function (data, svg) {
             tooltip.style("left", (event.pageX + 20) + "px")
                 .style("top", (event.pageY - 20) + "px")
                 .html("<h2><u>" + yearSelected + "</u></h2>" +
-                    "Click for top songs of the year </br></br>")
-                .selectAll()
+                    "Click for top songs of the year </br></br>");
+
+            tooltip.append("div")
+                .html(function()
+                {
+                    let d = selection[0]
+                    let html = "<h3 style='color: black'>Average Popularity</h3>"
+                    html += "<div style='clear:both'><span class=\"dot\" " +
+                        "style=\"background-color:" + rankColor(ranks[0]) +
+                        ";float:left;\">"
+                        + "</span>";
+                    html += "<span style='float:left; color:" + rankColor(ranks[0]) + "'> Decade Rank: " + "</span>"
+                    html += "<span style='float:right; margin-left:10px; color:" + rankColor(ranks[0]) + "'>";
+                    html += Math.round(d.data[5]);
+                    html += "</span></div>";
+
+                    html += "<div style='clear:both'><span class=\"dot\" " +
+                        "style=\"background-color:" + rankColor(ranks[1]) +
+                        ";float:left;\">"
+                        + "</span>";
+                    html += "<span style='float:left; color:" + rankColor(ranks[1]) + "'> Overall Rank: " + "</span>"
+                    html += "<span style='float:right; margin-left:10px; color:" + rankColor(ranks[1]) + "'>";
+                    html += Math.round(d.data[6]);
+                    html += "</span></div></br></br>";
+                    return html
+                })
+
+            tooltip.selectAll()
                 .data(selection).enter()
                 .append("div")
                 .style("color", d => colour(attributes[d.key]))
                 .style('font-size', "14px")
                 .style("clear", "both")
-                .html(d =>
+                .html((d, i) =>
                 {
-                    var html = "<span class=\"dot\" " +
+                    let html = "";
+                    if(i === 0)
+                    {
+                        html += "<h3 style='color: black'>Average Attributes</h3>"
+                    }
+                    html += "<span class=\"dot\" " +
                                 "style=\"background-color:" + colour(attributes[d.key]) +
                                 ";float:left;\">"
                                 + "</span>";
@@ -582,4 +617,26 @@ mouseout_parallelLine = function(event, d)
         .style("opacity", 0.7);
     d3.selectAll(dots)
         .style("opacity", 0.7);
+}
+
+mousemove_soundwave = function(event, d)
+{
+    let bars = document.getElementsByClassName("soundwave-bar");
+    let selectedBar = document.getElementsByClassName("soundwave-bar " + d[0]);
+
+    d3.selectAll(bars)
+        .filter(function (f) {
+            return f[0] !== d[0];
+        })
+        .style("opacity", 0.5);
+
+    d3.selectAll(selectedBar)
+        .style("opacity", 1);
+}
+
+mouseout_soundwave = function()
+{
+    let bars = document.getElementsByClassName("soundwave-bar");
+    d3.selectAll(bars)
+        .style("opacity", 1);
 }
