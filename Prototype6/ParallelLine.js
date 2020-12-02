@@ -19,7 +19,7 @@ parallelLines = function(data) {
 
         yScale[name] = d3.scaleLinear()
             .domain( [max,1] )
-            .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
+            .range([heightTopSongs - MARGIN.BOTTOM, MARGIN.TOP]);
 
         max *= 10;
     }
@@ -34,7 +34,7 @@ parallelLines = function(data) {
         .tickFormat( (d, i) => rankNames[i]);
 
     chart.append("g")
-        .attr("transform", "translate(0," + (height - MARGIN.BOTTOM) + ")")
+        .attr("transform", "translate(0," + (heightTopSongs - MARGIN.BOTTOM) + ")")
         .call(xAxis)
         .select(".domain")
         .attr("stroke-width", 0);

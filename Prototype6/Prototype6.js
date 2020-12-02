@@ -11,7 +11,9 @@ const MARGIN = {
 
 //dimension of our workspace
 const   width  = 1200,
-    height = 500;
+    height = 1000;
+
+const heightTopSongs = 800;
 
 /**
  * This function loads the data and calls other necessary functions to create our visualization
@@ -60,6 +62,8 @@ lineGraph = function (data, svg) {
 
     attributes = data.columns.slice(8, 11);
     uniqueYears = Array.from(d3.group(data, d => d.year));
+    let ranks = [rank[2], rank[0]];
+    console.log(ranks);
 
     let startYear = 1970;
     let endYear = 2020;
@@ -73,7 +77,21 @@ lineGraph = function (data, svg) {
     // Y scale
     let yScale = d3.scaleLinear()
         .domain([0, 2])
-        .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
+        .range([height, height/2 - MARGIN.BOTTOM]);
+
+    let yScaleRanks = {};
+    let max = 100;
+    for(let i in ranks){
+        let name = ranks[i];
+
+        yScaleRanks[name] = d3.scaleLinear()
+            .domain( [max,1] )
+            .range([height/2 - MARGIN.TOP * 6, MARGIN.TOP]);
+
+        max *= 10;
+    }
+
+    console.log(yScaleRanks);
 
     //TODO: Change colour scheme... Yellow is too hard to see
     //Colour Scale for each attribute
@@ -92,16 +110,32 @@ lineGraph = function (data, svg) {
         .ticks(10)
         .tickFormat(d3.format("d"))
 
+    let yAxisRanks = {};
+    let offset = 0;
+    for(let i in ranks)
+    {
+        let name = ranks[i];
+        yAxisRanks[name] = d3.axisLeft()
+            .scale(yScaleRanks[name]);
+
+        chart.append("g")
+            .attr("class", "yearAxis")
+            .attr("transform", "translate("+ (MARGIN.LEFT) + "," + 0 + offset +")")
+            .call(yAxisRanks[name]);
+
+        offset += (height/2 - MARGIN.TOP * 5) - (MARGIN.TOP);
+    }
+
     let yAxis = d3.axisLeft().scale(yScale);
 
     chart.append("g")
         .attr("class", "xAxis")
-        .attr("transform", "translate("+ 0 + ","+ (height-MARGIN.BOTTOM) +")")
+        .attr("transform", "translate("+ 0 + ","+ (height) +")")
         .call(xAxis);
 
     chart.append("g")
         .attr("class", "yAxis")
-        .attr("transform", "translate("+ MARGIN.LEFT + "," + 0 +")")
+        .attr("transform", "translate("+ MARGIN.LEFT + "," + (0) +")")
         .call(yAxis);
 
     //Create x and y axis labels
@@ -112,15 +146,15 @@ lineGraph = function (data, svg) {
         .attr("class", "x_label")
         .attr("text-anchor", "end")
         .attr("x", width/2 + 50)
-        .attr("y", height-MARGIN.BOTTOM + 50)
+        .attr("y", height + 50)
         .text(xLabel);
 
     chart.append("text")
         .attr("class", "y_label")
         .attr("text-anchor", "end")
-        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2 - MARGIN.TOP)+")")
+        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2 + MARGIN.BOTTOM + MARGIN.TOP)+")")
         .attr("x", MARGIN.LEFT - 40)
-        .attr("y", height/2 - MARGIN.TOP)
+        .attr("y", height/2 + MARGIN.BOTTOM + MARGIN.TOP)
         .text(yLabel);
 
     //** CREATE LEGEND *****************************************
@@ -174,6 +208,38 @@ lineGraph = function (data, svg) {
         }
     }
 
+    for(let i = 0; i < ranks.length; i ++)
+    {
+        for (let j = 0; j < groupByYearArray.length; j++)
+        {
+            let result = 0;
+            for (let k = 0; k < 10; k++)
+            {
+                if(ranks[i] === "songdecade_pos")
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].songdecade_pos);
+                else if(attributes[i] === "songentry_pos")
+                    result = parseFloat(result) + parseFloat(groupByYearArray[j][1][k].songentry_pos);
+            }
+            groupByYearArray[j].push(result / 10);
+        }
+    }
+
+    console.log(groupByYearArray);
+
+    //Create soundwaves
+    for(let i = 0; i < ranks.length; i++)
+    {
+        soundwave = chart.selectAll("bars")
+            .data(groupByYearArray)
+            .enter()
+            .append("rect")
+            .attr("x", d =>
+            {
+                return xScale(d[0]);
+            })
+            //.attr("y", d => yScaleRanks[i](d.))
+    }
+
     var keys = [2, 3, 4];
 
     //stack the data?
@@ -196,6 +262,7 @@ lineGraph = function (data, svg) {
             .curve(d3.curveMonotoneX)
     )
     .attr("class", d => "stack " + attributes[d.key - 2]);
+
 
     //** INTERACTIONS *****************************************
     //Create hover tooltip and vertical line
@@ -291,7 +358,7 @@ lineGraph = function (data, svg) {
                     //Translate vertical line
                     hoverLine.attr("d", function ()
                         {
-                            var data = "M" + xScale(d[indexSelected].data[0]) + "," + (height - MARGIN.TOP );
+                            var data = "M" + xScale(d[indexSelected].data[0]) + "," + (height );
                             data += " " + xScale(d[indexSelected].data[0]) + "," + MARGIN.BOTTOM;;
                             return data;
                         });
@@ -347,7 +414,7 @@ lineGraph = function (data, svg) {
         updateScatterTab(0);
 
         // Open stacked chart by default
-        document.getElementById("scatterTab").click();
+        document.getElementById("stackedTab").click();
 
         //TODO: 2. Show sliders for zoom functionality.
 

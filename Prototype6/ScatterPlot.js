@@ -26,7 +26,7 @@ scatterPlot = function(data)
 
     let yScale = d3.scaleLinear()
         .domain([0, 1])
-        .range([height - MARGIN.BOTTOM, MARGIN.TOP]);
+        .range([heightTopSongs - MARGIN.BOTTOM, MARGIN.TOP]);
 
     //Colour Scale for each attribute
     let colourScale = d3.scaleOrdinal()
@@ -54,10 +54,10 @@ scatterPlot = function(data)
     let xAxis = d3.axisBottom()
         .scale(xScale)
         .tickPadding(20)
-        .tickSize(-(height - MARGIN.BOTTOM * 2));
+        .tickSize(-(heightTopSongs - MARGIN.BOTTOM * 2));
 
     chart.append("g")
-        .attr("transform", "translate(0," + (height -MARGIN.BOTTOM)  +")")
+        .attr("transform", "translate(0," + (heightTopSongs -MARGIN.BOTTOM)  +")")
         .call(xAxis)
         .select(".domain")
         .attr("stroke-width", 0);
@@ -79,9 +79,9 @@ scatterPlot = function(data)
     chart.append("text")
         .attr("class", "y_label")
         .attr("text-anchor", "end")
-        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2 - MARGIN.TOP)+")")
+        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (heightTopSongs/2 - MARGIN.TOP)+")")
         .attr("x", MARGIN.LEFT - 40)
-        .attr("y", height/2 - MARGIN.TOP)
+        .attr("y", heightTopSongs/2 - MARGIN.TOP)
         .text(yLabel);
 
     //** CREATE LEGEND *****************************************
@@ -89,7 +89,7 @@ scatterPlot = function(data)
     heatMapScale = [instrumentalnessHeatMapScale, energyHeatMapScale,valenceHeatMapScale];
 
     let xPosLegend = 100;
-    let yPosLegend = height - MARGIN.TOP + 110;
+    let yPosLegend = heightTopSongs - MARGIN.TOP + 110;
 
     //Rectangle legend
     let legendWidth = 500;
