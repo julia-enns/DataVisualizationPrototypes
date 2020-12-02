@@ -86,14 +86,13 @@ lineGraph = function (data, svg) {
         let name = ranks[i];
 
         yScaleRanks[name] = d3.scaleLinear()
-            .domain( [max,1] )
+            .domain( [max,-max] )
             .range([height/2 - MARGIN.TOP * 6 + offset, MARGIN.TOP + offset]);
 
         max *= 10;
         offset = (height/2 - MARGIN.TOP * 5) - (MARGIN.TOP);
     }
 
-    //TODO: Change colour scheme... Yellow is too hard to see
     //Colour Scale for each attribute
     let colour = d3.scaleOrdinal()
         .domain(attributes)
@@ -111,16 +110,25 @@ lineGraph = function (data, svg) {
         .tickFormat(d3.format("d"))
 
     let yAxisRanks = {};
+    let tickValues = [1,"","","","",100,"","","","",1];
     for(let i in ranks)
     {
         let name = ranks[i];
         yAxisRanks[name] = d3.axisLeft()
-            .scale(yScaleRanks[name]);
-
-        chart.append("g")
+            .scale(yScaleRanks[name])
+            .tickFormat((d,i) => {return tickValues[i]; });
+        let y = chart.append("g")
             .attr("class", "yearAxis")
-            .attr("transform", "translate("+ (MARGIN.LEFT) + "," + 0 +")")
+            .attr("transform", "translate("+ (MARGIN.LEFT - 10) + "," + 0 +")")
             .call(yAxisRanks[name]);
+
+            y.select(".domain")
+            .attr("stroke-width", 0);
+
+            y.selectAll(".tick line")
+            .attr("stroke", "lightgrey");
+
+        tickValues = [1,"","","","",1000,"","","","",1];
     }
 
     let yAxis = d3.axisLeft().scale(yScale);
@@ -244,6 +252,7 @@ lineGraph = function (data, svg) {
 
     //Create soundwaves
     max = 100;
+    offset = 125;
     for(let i = 0; i < ranks.length; i++)
     {
         soundwave = chart.selectAll("bars")
@@ -254,35 +263,17 @@ lineGraph = function (data, svg) {
                 return xScale(d[0]) - 5;
             })
             .attr("y",  d => {
-                return yScaleRanks[ranks[i]](0);
+                return (yScaleRanks[ranks[i]](-max + d[(5+i)]));
             })
             .attr("width", 10)
             .attr("height", d => {
                 if(d[(5+i)] === max)
                     return 0;
-
-                console.log(d[0] + " " + ranks[i]  + " " + d[i+5] + " " + yScaleRanks[ranks[i]](max - d[(5+i)]));
-                return yScaleRanks[ranks[i]](max - d[(5+i)])/2;})
+                return yScaleRanks[ranks[i]]((max - d[(5+i)]) *2) - offset;})
             .attr("fill", rankColor(ranks[i]));
 
-        // soundwave = chart.selectAll("bars")
-        //     .data(groupByYearArray)
-        //     .enter()
-        //     .append("rect")
-        //     .attr("x", d => {
-        //         return xScale(d[0]) - 5;
-        //     })
-        //     .attr("y",  d => {
-        //         return yScaleRanks[ranks[i]](0) - yScaleRanks[ranks[i]](max - d[(5+i)])/2;
-        //     })
-        //     .attr("width", 10)
-        //     .attr("height", d => {
-        //         if(d[(5+i)] === 0)
-        //             return 0;
-        //         return (yScaleRanks[ranks[i]](max - d[(5+i)])/2);})
-        //     .attr("fill", rankColor(ranks[i]));
-
-        max *= 10 ;
+        max *= 10;
+        offset += 200;
     }
 
     var keys = [2, 3, 4];
