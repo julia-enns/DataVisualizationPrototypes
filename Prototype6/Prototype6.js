@@ -207,6 +207,7 @@ lineGraph = function (data, svg) {
 
     console.log(groupByYearArray);
 
+    max = 100;
     for(let i = 0; i < ranks.length; i ++)
     {
         for (let j = 0; j < groupByYearArray.length; j++)
@@ -231,6 +232,7 @@ lineGraph = function (data, svg) {
             else
                 groupByYearArray[j].push(result / total);
         }
+        max *= 10;
     }
 
     rankColor = function(d){
@@ -244,7 +246,7 @@ lineGraph = function (data, svg) {
     max = 100;
     for(let i = 0; i < ranks.length; i++)
     {
-       /* soundwave = chart.selectAll("bars")
+        soundwave = chart.selectAll("bars")
             .data(groupByYearArray)
             .enter()
             .append("rect")
@@ -256,31 +258,31 @@ lineGraph = function (data, svg) {
             })
             .attr("width", 10)
             .attr("height", d => {
-                if(d[(5+i)] === 0)
+                if(d[(5+i)] === max)
                     return 0;
 
-                console.log(d[0] + " " + ranks[i]  + " " + (max - d[(5+i)]));
+                console.log(d[0] + " " + ranks[i]  + " " + d[i+5] + " " + yScaleRanks[ranks[i]](max - d[(5+i)]));
                 return yScaleRanks[ranks[i]](max - d[(5+i)])/2;})
-            .attr("fill", "black");*/
-
-        soundwave = chart.selectAll("bars")
-            .data(groupByYearArray)
-            .enter()
-            .append("rect")
-            .attr("x", d => {
-                return xScale(d[0]) - 5;
-            })
-            .attr("y",  d => {
-                return yScaleRanks[ranks[i]](0) - yScaleRanks[ranks[i]](max - d[(5+i)])/2;
-            })
-            .attr("width", 10)
-            .attr("height", d => {
-                if(d[(5+i)] === 0)
-                    return 0;
-                return (yScaleRanks[ranks[i]](max - d[(5+i)])/2);})
             .attr("fill", rankColor(ranks[i]));
 
-        max = 991;
+        // soundwave = chart.selectAll("bars")
+        //     .data(groupByYearArray)
+        //     .enter()
+        //     .append("rect")
+        //     .attr("x", d => {
+        //         return xScale(d[0]) - 5;
+        //     })
+        //     .attr("y",  d => {
+        //         return yScaleRanks[ranks[i]](0) - yScaleRanks[ranks[i]](max - d[(5+i)])/2;
+        //     })
+        //     .attr("width", 10)
+        //     .attr("height", d => {
+        //         if(d[(5+i)] === 0)
+        //             return 0;
+        //         return (yScaleRanks[ranks[i]](max - d[(5+i)])/2);})
+        //     .attr("fill", rankColor(ranks[i]));
+
+        max *= 10 ;
     }
 
     var keys = [2, 3, 4];
