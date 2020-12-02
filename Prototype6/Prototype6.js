@@ -76,12 +76,12 @@ lineGraph = function (data, svg) {
 
     // Y scale
     let yScale = d3.scaleLinear()
-        .domain([0, 2])
+        .domain([0, 1.8])
         .range([height, height/2 - MARGIN.BOTTOM]);
 
     let yScaleRanks = {};
     let max = 100;
-    let offset = 0;
+    let offset = 20;
     for(let i in ranks){
         let name = ranks[i];
 
@@ -90,7 +90,7 @@ lineGraph = function (data, svg) {
             .range([height/2 - MARGIN.TOP * 6 + offset, MARGIN.TOP + offset]);
 
         max *= 10;
-        offset = (height/2 - MARGIN.TOP * 5) - (MARGIN.TOP);
+        offset += (height/2 - MARGIN.TOP * 5) - (MARGIN.TOP);
     }
 
     //Colour Scale for each attribute
@@ -111,15 +111,20 @@ lineGraph = function (data, svg) {
 
     let yAxisRanks = {};
     let tickValues = [1,"","","","",100,"","","","",1];
+    let rankTitle = ["Average Decade Rank", "Average Overall Rank"];
+    offset = 0;
     for(let i in ranks)
     {
         let name = ranks[i];
         yAxisRanks[name] = d3.axisLeft()
             .scale(yScaleRanks[name])
-            .tickFormat((d,i) => {return tickValues[i]; });
+            .tickFormat((d,i) => {return tickValues[i]; })
+            .tickPadding(10)
+            .tickSize(10);
+
         let y = chart.append("g")
             .attr("class", "yearAxis")
-            .attr("transform", "translate("+ (MARGIN.LEFT - 10) + "," + 0 +")")
+            .attr("transform", "translate("+ (MARGIN.LEFT) + "," + 0 +")")
             .call(yAxisRanks[name]);
 
             y.select(".domain")
@@ -128,8 +133,18 @@ lineGraph = function (data, svg) {
             y.selectAll(".tick line")
             .attr("stroke", "lightgrey");
 
+        chart.append("text")
+            .attr("class", "y_RankLabel")
+            .attr("text-anchor", "end")
+            .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 50) + " " + (MARGIN.TOP + 30)+")")
+            .attr("x", MARGIN.LEFT - 30 - offset)
+            .attr("y", MARGIN.TOP + 30)
+            .text(rankTitle[i]);
+
         tickValues = [1,"","","","",1000,"","","","",1];
+        offset = 200;
     }
+
 
     let yAxis = d3.axisLeft().scale(yScale);
 
@@ -245,14 +260,14 @@ lineGraph = function (data, svg) {
 
     rankColor = function(d){
         if(d === "songdecade_pos")
-            return "#d97511";
+            return "#d39480";
         else
-            return "#3e8945";
+            return "#5f6779";
     }
 
     //Create soundwaves
     max = 100;
-    offset = 125;
+    offset = 144;
     for(let i = 0; i < ranks.length; i++)
     {
         soundwave = chart.selectAll("bars")
