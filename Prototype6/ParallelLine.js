@@ -69,7 +69,7 @@ parallelLines = function(data) {
     let xLegend = 150;
     let yLegend = height - 340;
 
-    let legend = svg.append("g").attr("class", "legend");
+    let legend = chart.append("g").attr("class", "legend");
 
     //Colour encoding legend
     legend.append("text")
