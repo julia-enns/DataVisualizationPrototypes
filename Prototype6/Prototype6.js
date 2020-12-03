@@ -138,7 +138,7 @@ lineGraph = function (data, svg) {
             .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 50) + " " + (MARGIN.TOP + 20)+")")
             .attr("x", MARGIN.LEFT - 30 - offset)
             .attr("y", MARGIN.TOP + 20)
-            .attr("font-size", "10px")
+            .attr("font-size", "12px")
             .text(rankTitle[i]);
 
         tickValues = [1,"","","","",1000,"","","","",1];
@@ -183,7 +183,8 @@ lineGraph = function (data, svg) {
         .attr("class", "x_label")
         .attr("text-anchor", "end")
         .attr("x", width/2 + 10)
-        .attr("y", height - MARGIN.BOTTOM - 20)
+        .attr("y", height - MARGIN.BOTTOM - 40)
+        .attr("font-size", "12px")
         .text(xLabel);
 
     chart.append("text")
@@ -191,7 +192,8 @@ lineGraph = function (data, svg) {
         .attr("text-anchor", "end")
         .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2)+")")
         .attr("x", MARGIN.LEFT - 80)
-        .attr("y", height/2 )
+        .attr("y", height/2)
+        .attr("font-size", "12px")
         .text(yLabel);
 
     //** CREATE LEGEND *****************************************
@@ -205,19 +207,20 @@ lineGraph = function (data, svg) {
         .attr("x", xLegend)
         .attr("y", yLegend - 30)
         .attr("font-weight", "bold")
-        .text("Attributes")
+        .attr("font-size", "16px")
+        .text("Attributes");
 
     for(let i = 0; i < attributes.length; i++)
     {
         legend.append("circle")
             .attr("cx", xLegend)
-            .attr("cy", yLegend)
+            .attr("cy", yLegend - 5)
             .attr("r", 8)
             .style("fill", colour(attributes[i]));
         legend.append("text")
             .attr("x", xLegend + 20)
             .attr("y", yLegend)
-            .style("font-size", "14px")
+            .attr("font-size", "12px")
             .text(attributes[i]);
 
         yLegend += 20;
@@ -500,10 +503,10 @@ lineGraph = function (data, svg) {
                                 "style=\"background-color:" + colour(attributes[d.key]) +
                                 ";float:left;\">"
                                 + "</span>";
-                    html += "<span style='float:left;'>" + attributes[d.key] + ": " + "</span>"
+                    html += "<div style = font-size:14px;font-weight:bold;'><span style='float:left;'>" + attributes[d.key] + ": " + "</span>"
                     html += "<span style=\"float:right;margin-left:10px\">";
                     html += d.stackedValue.toFixed(5);
-                    html += "</span>";
+                    html += "</span></div>";
 
                     return html;
                 })

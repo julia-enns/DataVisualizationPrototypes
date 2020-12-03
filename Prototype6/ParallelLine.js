@@ -67,7 +67,7 @@ parallelLines = function(data) {
 
 
     let xLegend = 150;
-    let yLegend = height - 350;
+    let yLegend = height - 340;
 
     let legend = svg.append("g").attr("class", "legend");
 
@@ -75,7 +75,9 @@ parallelLines = function(data) {
     legend.append("text")
         .attr("x", xLegend)
         .attr("y", yLegend - 30)
-        .text("Line Representation");
+        .text("Line Representation")
+        .attr("font-weight", "bold")
+        .attr("font-size", "16px");
 
 
     legendColor = function(d) {
@@ -98,8 +100,8 @@ parallelLines = function(data) {
             .style("fill", legendColor(i));
         legend.append("text")
             .attr("x", xLegend + 20)
-            .attr("y", yLegend)
-            .style("font-size", "14px")
+            .attr("y", yLegend + 5)
+            .attr("font-size", "12px")
             .text(legendNames[i]);
 
         yLegend += 20;

@@ -80,8 +80,9 @@ scatterPlot = function(data)
         .attr("class", "y_label")
         .attr("text-anchor", "end")
         .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (heightTopSongs/2 - MARGIN.TOP)+")")
-        .attr("x", MARGIN.LEFT - 40)
+        .attr("x", MARGIN.LEFT)
         .attr("y", heightTopSongs/2 - MARGIN.TOP)
+        .attr("font-size", "12px")
         .text(yLabel);
 
     chart.append("text")
@@ -109,14 +110,15 @@ scatterPlot = function(data)
         .attr("x", 0)
         .attr("y", yPosLegend - 40)
         .text("Yearly Rank")
-        .attr("font-size", 20);
+        .attr("font-weight", "bold")
+        .attr("font-size", "16px");
 
     for(let i = 0; i < heatMapScale.length; i++)
     {
         chart.append("text")
-            .attr("font-size", "12px")
             .attr("x", 0)
             .attr("y", yPosLegend + 15)
+            .attr("font-size", "12px")
             .text(attributes[i]);
 
         let rank = [];
