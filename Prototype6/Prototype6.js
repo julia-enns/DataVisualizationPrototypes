@@ -458,6 +458,11 @@ lineGraph = function (data, svg) {
                 .html(function()
                 {
                     let d = selection[0]
+
+                    let noRank = "Unranked";
+                    let decadeRank = (d.data[5] === 100) ? noRank : Math.round(d.data[5]);
+                    let overallRank = (d.data[6] === 1000) ? noRank : Math.round(d.data[6]);
+
                     let html = "<h3 style='color: black;font-size:17px;font-weight: bold;'>Average Popularity</h3>"
                     html += "<div style='clear:both;font-size:14px;font-weight: bold;'><span class=\"dot\" " +
                         "style=\"background-color:" + rankColor(ranks[0]) +
@@ -465,7 +470,7 @@ lineGraph = function (data, svg) {
                         + "</span>";
                     html += "<span style='float:left; color:" + rankColor(ranks[0]) + "'> Decade Rank: " + "</span>"
                     html += "<span style='float:right; margin-left:10px; color:" + rankColor(ranks[0]) + "'>";
-                    html += Math.round(d.data[5]);
+                    html += decadeRank;
                     html += "</span></div>";
 
                     html += "<div style='clear:both;font-size:14px;font-weight: bold;'><span class=\"dot\" " +
@@ -474,7 +479,7 @@ lineGraph = function (data, svg) {
                         + "</span>";
                     html += "<span style='float:left; color:" + rankColor(ranks[1]) + "'> Overall Rank: " + "</span>"
                     html += "<span style='float:right; margin-left:10px; color:" + rankColor(ranks[1]) + "'>";
-                    html += Math.round(d.data[6]);
+                    html += overallRank;
                     html += "</span></div></br></br>";
                     return html
                 })
