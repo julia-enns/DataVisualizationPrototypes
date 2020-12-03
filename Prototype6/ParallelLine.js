@@ -65,6 +65,46 @@ parallelLines = function(data) {
         .attr("font-weight", "bold")
         .text("Song Popularity");
 
+
+    let xLegend = 150;
+    let yLegend = height - 350;
+
+    let legend = svg.append("g").attr("class", "legend");
+
+    //Colour encoding legend
+    legend.append("text")
+        .attr("x", xLegend)
+        .attr("y", yLegend - 30)
+        .text("Line Representation");
+
+
+    legendColor = function(d) {
+        if(d === 0)
+            return "#a1388d";
+        else if (d === 1)
+            return "#009ab9";
+        else if (d === 2)
+            return "#31872a";
+        else return "#d7612d";
+    };
+
+    let legendNames = ["Has Every Rank","Is Missing Decade Rank", "Is Missing Overall Rank", "Is Missing Both Decade and Overall Rank"];
+    for(let i = 0; i < legendNames.length; i++)
+    {
+        legend.append("circle")
+            .attr("cx", xLegend)
+            .attr("cy", yLegend)
+            .attr("r", 8)
+            .style("fill", legendColor(i));
+        legend.append("text")
+            .attr("x", xLegend + 20)
+            .attr("y", yLegend)
+            .style("font-size", "14px")
+            .text(legendNames[i]);
+
+        yLegend += 20;
+    }
+
     //** CREATE LINES ****************************************
 
     function path(d) {
