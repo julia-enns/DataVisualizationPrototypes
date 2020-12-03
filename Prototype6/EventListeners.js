@@ -20,7 +20,7 @@ function openChart(evt, graphName) {
 
     //Change title
     if(graphName == "Stacked")
-        document.getElementById("chartTitle").innerHTML = "Songs over the Decades";
+        document.getElementById("chartTitle").innerHTML = "Songs Over the Decades";
     if(graphName == "Scatter")
         updateTitleYear();
 }
