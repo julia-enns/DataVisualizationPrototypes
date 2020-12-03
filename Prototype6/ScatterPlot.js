@@ -54,7 +54,7 @@ scatterPlot = function(data)
     let xAxis = d3.axisBottom()
         .scale(xScale)
         .tickPadding(20)
-        .tickSize(-(heightTopSongs - MARGIN.BOTTOM * 2));
+        .tickSize(-(heightTopSongs - MARGIN.BOTTOM * 2 + 35));
 
     chart.append("g")
         .attr("transform", "translate(0," + (heightTopSongs -MARGIN.BOTTOM)  +")")

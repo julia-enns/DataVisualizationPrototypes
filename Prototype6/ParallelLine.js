@@ -10,7 +10,7 @@ parallelLines = function(data) {
 
     let xScale = d3.scalePoint()
         .domain(ranks)
-        .range([MARGIN.LEFT + 75, MARGIN.LEFT + 500]);
+        .range([MARGIN.LEFT + 75, MARGIN.LEFT + 450]);
 
     let yScale = {};
     let max = 10;

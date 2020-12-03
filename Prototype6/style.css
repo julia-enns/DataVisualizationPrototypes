@@ -1,5 +1,5 @@
 #SVG_CONTAINER{
-    height: 1200px;
+    height: 900px;
     width: 1300px;
 }
 
@@ -8,12 +8,12 @@
 }
 
 #SVG_CONTAINER_ScatterPlot{
-    height: 1000px;
+    height: 900px;
     width: 700px;
 }
 
 #SVG_CONTAINER_ParallelLines{
-    height: 1000px;
+    height: 900px;
     width: 700px;
 }
 

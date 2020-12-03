@@ -3,17 +3,17 @@ window.onload = function(){
 };
 
 const MARGIN = {
-    "LEFT":100,
+    "LEFT":75,
     "RIGHT":50,
-    "TOP":50,
-    "BOTTOM":50,
+    "TOP":40,
+    "BOTTOM":75,
 };
 
 //dimension of our workspace
-const   width  = 1200,
-    height = 1000;
+const   width  = 1100,
+    height = 900;
 
-const heightTopSongs = 800;
+const heightTopSongs = 500;
 
 /**
  * This function loads the data and calls other necessary functions to create our visualization
@@ -76,20 +76,20 @@ lineGraph = function (data, svg) {
     // Y scale
     let yScale = d3.scaleLinear()
         .domain([0, 1.8])
-        .range([height + 40, height/2 - MARGIN.BOTTOM + 40]);
+        .range([height - (MARGIN.BOTTOM * 2), height/2 - (MARGIN.TOP * 2)]);
 
     let yScaleRanks = {};
     let max = 100;
-    let offset = 20;
+    let offset = 0 ;
     for(let i in ranks){
         let name = ranks[i];
 
         yScaleRanks[name] = d3.scaleLinear()
-            .domain( [max,-max] )
-            .range([height/2 - MARGIN.TOP * 6 + offset, MARGIN.TOP + offset]);
+            .domain( [max,-max])
+            .range([height/6 + offset - 10, MARGIN.TOP + offset]);
 
         max *= 10;
-        offset += (height/2 - MARGIN.TOP * 5) - (MARGIN.TOP);
+        offset += (height/6 ) - (MARGIN.TOP) + MARGIN.TOP;
     }
 
     //Colour Scale for each attribute
@@ -135,20 +135,21 @@ lineGraph = function (data, svg) {
         chart.append("text")
             .attr("class", "y_RankLabel")
             .attr("text-anchor", "end")
-            .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 50) + " " + (MARGIN.TOP + 30)+")")
+            .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 50) + " " + (MARGIN.TOP + 20)+")")
             .attr("x", MARGIN.LEFT - 30 - offset)
-            .attr("y", MARGIN.TOP + 30)
+            .attr("y", MARGIN.TOP + 20)
+            .attr("font-size", "10px")
             .text(rankTitle[i]);
 
         tickValues = [1,"","","","",1000,"","","","",1];
-        offset = 200;
+        offset = (height/6 ) - (MARGIN.TOP) + MARGIN.TOP;
     }
 
     chart.append("text")
         .attr("class", "popularityLabel")
         .attr("text-anchor", "end")
         .attr("x", MARGIN.LEFT + 80)
-        .attr("y", MARGIN.TOP - 10)
+        .attr("y", MARGIN.TOP - 20)
         .attr("font-size", "20px")
         .attr("font-weight", "bold")
         .text("Song Popularity");
@@ -157,18 +158,16 @@ lineGraph = function (data, svg) {
         .attr("class", "attributesLabel")
         .attr("text-anchor", "end")
         .attr("x", MARGIN.LEFT + 80)
-        .attr("y", MARGIN.TOP + 420)
+        .attr("y", MARGIN.TOP + 300)
         .attr("font-size", "20px")
         .attr("font-weight", "bold")
         .text("Song Attributes");
-
-
 
     let yAxis = d3.axisLeft().scale(yScale);
 
     chart.append("g")
         .attr("class", "xAxis")
-        .attr("transform", "translate("+ 0 + ","+ (height + 40) +")")
+        .attr("transform", "translate("+ 0 + ","+ (height - (2 * MARGIN.BOTTOM)) +")")
         .call(xAxis);
 
     chart.append("g")
@@ -183,20 +182,20 @@ lineGraph = function (data, svg) {
     chart.append("text")
         .attr("class", "x_label")
         .attr("text-anchor", "end")
-        .attr("x", width/2 + 50)
-        .attr("y", height + 90)
+        .attr("x", width/2 + 10)
+        .attr("y", height - MARGIN.BOTTOM - 20)
         .text(xLabel);
 
     chart.append("text")
         .attr("class", "y_label")
         .attr("text-anchor", "end")
-        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2 + MARGIN.BOTTOM + MARGIN.TOP)+")")
+        .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2)+")")
         .attr("x", MARGIN.LEFT - 80)
-        .attr("y", height/2 + MARGIN.BOTTOM + MARGIN.TOP )
+        .attr("y", height/2 )
         .text(yLabel);
 
     //** CREATE LEGEND *****************************************
-    let xLegend = width - 50;
+    let xLegend = width - 30;
     let yLegend = height/2 + MARGIN.BOTTOM;
 
     let legend = svg.append("g").attr("class", "legend");
@@ -284,7 +283,7 @@ lineGraph = function (data, svg) {
 
     //Create soundwaves
     max = 100;
-    offset = 144;
+    offset = 90;
     for(let i = 0; i < ranks.length; i++)
     {
         soundwave = chart.append("g")
@@ -308,7 +307,7 @@ lineGraph = function (data, svg) {
             .attr("fill", rankColor(ranks[i]));
 
         max *= 10;
-        offset += 200;
+        offset += (height/6 ) - (MARGIN.TOP) + MARGIN.TOP;
     }
 
     var keys = [2, 3, 4];
@@ -377,7 +376,7 @@ lineGraph = function (data, svg) {
     let indexSelected;
     // append a rect to catch mouse movements on canvas
     mouseG.append('svg:rect')
-        .attr('width', width - MARGIN.LEFT - MARGIN.RIGHT - 50)
+        .attr('width', width - MARGIN.LEFT - MARGIN.RIGHT - 30)
         .attr('height', height - MARGIN.TOP)
         .attr('fill', 'none')
         .attr('pointer-events', 'all')
@@ -432,8 +431,8 @@ lineGraph = function (data, svg) {
                     //Translate vertical line
                     hoverLine.attr("d", function ()
                         {
-                            var data = "M" + xScale(d[indexSelected].data[0]) + "," + (height + 40);
-                            data += " " + xScale(d[indexSelected].data[0]) + "," + MARGIN.BOTTOM;;
+                            var data = "M" + xScale(d[indexSelected].data[0]) + "," + (height - MARGIN.BOTTOM*2);
+                            data += " " + xScale(d[indexSelected].data[0]) + "," + MARGIN.TOP;
                             return data;
                         });
 
@@ -581,7 +580,7 @@ mouseover_scatter = function(event, d)
             .style("fill", (d => heatMapScale[j](3)));
     }
     scatterTooltip.transition().style("opacity", 0.8);
-    scatterTooltip.style("left", (558) + "px")
+    scatterTooltip.style("left", (545) + "px")
         .style("top", (250) + "px")
         .style("width", 250 + "px")
         .html("<h1>" + d.name + "</h1><h2>by "
