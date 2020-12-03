@@ -84,6 +84,15 @@ scatterPlot = function(data)
         .attr("y", heightTopSongs/2 - MARGIN.TOP)
         .text(yLabel);
 
+    chart.append("text")
+        .attr("class", "attributesLabel")
+        .attr("text-anchor", "end")
+        .attr("x", MARGIN.LEFT + 140)
+        .attr("y", MARGIN.TOP - 20)
+        .attr("font-size", "20px")
+        .attr("font-weight", "bold")
+        .text("Song Attributes");
+
     //** CREATE LEGEND *****************************************
 
     heatMapScale = [instrumentalnessHeatMapScale, energyHeatMapScale,valenceHeatMapScale];
@@ -104,9 +113,8 @@ scatterPlot = function(data)
 
     for(let i = 0; i < heatMapScale.length; i++)
     {
-
         chart.append("text")
-            .attr("font-size", "11px")
+            .attr("font-size", "12px")
             .attr("x", 0)
             .attr("y", yPosLegend + 15)
             .text(attributes[i]);

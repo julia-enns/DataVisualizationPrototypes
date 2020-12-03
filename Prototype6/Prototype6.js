@@ -76,7 +76,7 @@ lineGraph = function (data, svg) {
     // Y scale
     let yScale = d3.scaleLinear()
         .domain([0, 1.8])
-        .range([height, height/2 - MARGIN.BOTTOM]);
+        .range([height + 40, height/2 - MARGIN.BOTTOM + 40]);
 
     let yScaleRanks = {};
     let max = 100;
@@ -95,7 +95,7 @@ lineGraph = function (data, svg) {
     //Colour Scale for each attribute
     let colour = d3.scaleOrdinal()
         .domain(attributes)
-        .range(["#417ed5", "#2a2b2d", "#d9514e"]);
+        .range(["#376ab3", "#2a2b2d", "#ce4d4a"]);
 
     let circleColour = d3.scaleOrdinal()
         .domain(attributes)
@@ -106,7 +106,7 @@ lineGraph = function (data, svg) {
     let xAxis = d3.axisBottom()
         .scale(xScale)
         .ticks(10)
-        .tickFormat(d3.format("d"))
+        .tickFormat(d3.format("d"));
 
     let yAxisRanks = {};
     let tickValues = [1,"","","","",100,"","","","",1];
@@ -144,12 +144,31 @@ lineGraph = function (data, svg) {
         offset = 200;
     }
 
+    chart.append("text")
+        .attr("class", "popularityLabel")
+        .attr("text-anchor", "end")
+        .attr("x", MARGIN.LEFT + 80)
+        .attr("y", MARGIN.TOP - 10)
+        .attr("font-size", "20px")
+        .attr("font-weight", "bold")
+        .text("Song Popularity");
+
+    chart.append("text")
+        .attr("class", "attributesLabel")
+        .attr("text-anchor", "end")
+        .attr("x", MARGIN.LEFT + 80)
+        .attr("y", MARGIN.TOP + 420)
+        .attr("font-size", "20px")
+        .attr("font-weight", "bold")
+        .text("Song Attributes");
+
+
 
     let yAxis = d3.axisLeft().scale(yScale);
 
     chart.append("g")
         .attr("class", "xAxis")
-        .attr("transform", "translate("+ 0 + ","+ (height) +")")
+        .attr("transform", "translate("+ 0 + ","+ (height + 40) +")")
         .call(xAxis);
 
     chart.append("g")
@@ -159,26 +178,26 @@ lineGraph = function (data, svg) {
 
     //Create x and y axis labels
     let xLabel = "Year";
-    let yLabel = "Attribute Measurement"
+    let yLabel = "Attribute Measurement";
 
     chart.append("text")
         .attr("class", "x_label")
         .attr("text-anchor", "end")
         .attr("x", width/2 + 50)
-        .attr("y", height + 50)
+        .attr("y", height + 90)
         .text(xLabel);
 
     chart.append("text")
         .attr("class", "y_label")
         .attr("text-anchor", "end")
         .attr("transform", "rotate(-90 " + (MARGIN.LEFT - 40) + " " + (height/2 + MARGIN.BOTTOM + MARGIN.TOP)+")")
-        .attr("x", MARGIN.LEFT - 40)
-        .attr("y", height/2 + MARGIN.BOTTOM + MARGIN.TOP)
+        .attr("x", MARGIN.LEFT - 80)
+        .attr("y", height/2 + MARGIN.BOTTOM + MARGIN.TOP )
         .text(yLabel);
 
     //** CREATE LEGEND *****************************************
-    let xLegend = width;
-    let yLegend = MARGIN.TOP;
+    let xLegend = width - 50;
+    let yLegend = height/2 + MARGIN.BOTTOM;
 
     let legend = svg.append("g").attr("class", "legend");
 
@@ -199,7 +218,7 @@ lineGraph = function (data, svg) {
         legend.append("text")
             .attr("x", xLegend + 20)
             .attr("y", yLegend)
-            .style("font-size", "10px")
+            .style("font-size", "14px")
             .text(attributes[i]);
 
         yLegend += 20;
@@ -258,9 +277,9 @@ lineGraph = function (data, svg) {
 
     rankColor = function(d){
         if(d === "songdecade_pos")
-            return "#d39480";
+            return "#973b39";
         else
-            return "#5f6779";
+            return "#33849d";
     }
 
     //Create soundwaves
@@ -433,14 +452,14 @@ lineGraph = function (data, svg) {
             tooltip.style("left", (event.pageX + 20) + "px")
                 .style("top", (event.pageY - 20) + "px")
                 .html("<h2><u>" + yearSelected + "</u></h2>" +
-                    "Click for top songs of the year </br></br>");
+                    "<h3>Click for top songs of the year<h3></h3></br>");
 
             tooltip.append("div")
                 .html(function()
                 {
                     let d = selection[0]
-                    let html = "<h3 style='color: black'>Average Popularity</h3>"
-                    html += "<div style='clear:both'><span class=\"dot\" " +
+                    let html = "<h3 style='color: black;font-size:17px;font-weight: bold;'>Average Popularity</h3>"
+                    html += "<div style='clear:both;font-size:14px;font-weight: bold;'><span class=\"dot\" " +
                         "style=\"background-color:" + rankColor(ranks[0]) +
                         ";float:left;\">"
                         + "</span>";
@@ -449,7 +468,7 @@ lineGraph = function (data, svg) {
                     html += Math.round(d.data[5]);
                     html += "</span></div>";
 
-                    html += "<div style='clear:both'><span class=\"dot\" " +
+                    html += "<div style='clear:both;font-size:14px;font-weight: bold;'><span class=\"dot\" " +
                         "style=\"background-color:" + rankColor(ranks[1]) +
                         ";float:left;\">"
                         + "</span>";
@@ -628,7 +647,7 @@ mousemove_soundwave = function(event, d)
         .filter(function (f) {
             return f[0] !== d[0];
         })
-        .style("opacity", 0.5);
+        .style("opacity", 0.4);
 
     d3.selectAll(selectedBar)
         .style("opacity", 1);

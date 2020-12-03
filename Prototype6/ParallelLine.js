@@ -56,6 +56,15 @@ parallelLines = function(data) {
         offset += 212.5;
     }
 
+    chart.append("text")
+        .attr("class", "popularityLabel")
+        .attr("text-anchor", "end")
+        .attr("x", MARGIN.LEFT + 220)
+        .attr("y", MARGIN.TOP - 20)
+        .attr("font-size", "20px")
+        .attr("font-weight", "bold")
+        .text("Song Popularity");
+
     //** CREATE LINES ****************************************
 
     function path(d) {
@@ -76,14 +85,14 @@ parallelLines = function(data) {
     function color(d) {
         if (d[ranks[1]] === "") {
             if (d[ranks[2]] === "") {
-                return "#ea8a00";
+                return "#d7612d";
             } else {
-                return "#008aa8";
+                return "#009ab9";
             }
         } else if (d[ranks[2]] === "") {
-            return "#099a02";
+            return "#31872a";
         } else {
-            return "#cb6aab";
+            return "#a1388d";
         }
     }
 
