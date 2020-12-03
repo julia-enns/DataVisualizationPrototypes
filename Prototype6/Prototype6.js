@@ -432,7 +432,7 @@ lineGraph = function (data, svg) {
                     //Translate vertical line
                     hoverLine.attr("d", function ()
                         {
-                            var data = "M" + xScale(d[indexSelected].data[0]) + "," + (height );
+                            var data = "M" + xScale(d[indexSelected].data[0]) + "," + (height + 40);
                             data += " " + xScale(d[indexSelected].data[0]) + "," + MARGIN.BOTTOM;;
                             return data;
                         });
